@@ -23,4 +23,8 @@ import java.util.Set;
 		this.contacts = contacts;
 		this.date = date;
 	}
+
+	public int getId() {
+		return 1;
+	}
  }
