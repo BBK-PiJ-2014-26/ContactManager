@@ -9,12 +9,14 @@ import org.junit.Before;
  */
 public class ContactTest {
 
+	Contact myContact; // A contact object to be used in testing.
+
 	/**
 	 * Creates a contact object to be used in all tests.
 	 */
 	@Before
 	public void buildUp() {
-		Contact myContact = new Contact("Bruce Wayne");
+		myContact = new ContactImpl("Bruce Wayne");
 	}
 
 	/**
@@ -23,6 +25,7 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnCorrectId() {
+		buildUp();
 		int expectedId = 1;
 		int actualId = myContact.getId();
 		assertEquals(expectedId, actualId);
