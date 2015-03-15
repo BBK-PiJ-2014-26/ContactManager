@@ -27,4 +27,8 @@ import java.util.Set;
 	public int getId() {
 		return 1;
 	}
+
+	public Calendar getDate() {
+		return date;
+	}
  }
