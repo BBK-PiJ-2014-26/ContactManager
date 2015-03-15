@@ -1,5 +1,6 @@
-import org.junit.*;
+import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  * Tests the class Contact.
@@ -20,8 +21,8 @@ public class ContactTest {
 	 * Tests getId().
 	 * The returned contact ID should match the ID assigned during instantiation.
 	 */
+	@Test
 	public void shouldReturnCorrectId() {
-		buildUp();
 		int expectedId = 1;
 		int actualId = myContact.getId();
 		assertEquals(expectedId, actualId);
@@ -31,8 +32,8 @@ public class ContactTest {
 	 * Tests getName().
 	 * The returned name should match the name created during instantiation.
 	 */
+	@Test
 	public void shouldReturnCorrectName() {
-		buildUp();
 		String expectedName = "Bruce Wayne";
 		String actualName = myContact.getName();
 		assertEquals(expectedName, actualName);
@@ -42,6 +43,7 @@ public class ContactTest {
 	 * Tests addNotes() and getNotes().
 	 * The returned notes should match those we added.
 	 */
+	@Test
 	public void shouldReturnCorrectNotes() {
 		buildUp();
 		myContact.addNotes("We better catch that pesky Joker.");
@@ -54,8 +56,8 @@ public class ContactTest {
 	 * Tests that when a Contact object has a null notes field,
 	 * getNotes() returns an empty String.
 	 */
+	@Test
 	public void shouldReturnEmptyString() {
-		buildUp();
 		String expectedNotes = "";
 		String actualNotes = myContact.getNotes();
 		assertEquals(expectedNotes, actualNotes);
