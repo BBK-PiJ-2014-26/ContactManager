@@ -31,4 +31,8 @@ import java.util.Set;
 	public Calendar getDate() {
 		return date;
 	}
+
+	public Set<Contact> getContacts() {
+		return contacts;
+	}
  }
