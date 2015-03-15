@@ -3,6 +3,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import java.util.GregorianCalendar;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Calendar;
+
 
 /**
  * Tests the class MeetingImpl.
@@ -17,7 +20,10 @@ public class MeetingTest {
 	 */
 	@Before
 	public void buildUp() {
-		myMeeting = new MeetingImpl();
+		Set<Contact> tempContactSet = new CopyOnWriteArraySet<Contact>();
+		tempContactSet.add(new ContactImpl("Bruce Wayne"));
+		tempContactSet.add(new ContactImpl("Clark Kent"));
+		myMeeting = new MeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0));
 	}
 
 	/**
@@ -40,8 +46,23 @@ public class MeetingTest {
 	@Test
 	public void shouldReturnCorrectDate() {
 		Calendar expectedDate = new GregorianCalendar(2015, 10, 10, 10, 0);
-		Calendar actualDate = getDate();
+		Calendar actualDate = myMeeting.getDate();
 		assertEquals(expectedDate, actualDate);
 	}
 
+	/**
+	 * Tests getContacts().
+	 *
+	 * Should return correct set of Contacts.
+	 */
+	@Test
+	public void shouldReturnCorrectContactSet() {
+		Set<Contact> tempSet = new CopyOnWriteArraySet<Contact>();
+		tempSet.add(new ContactImpl("Bruce Wayne"));
+		tempSet.add(new ContactImpl("Clark Kent"));
+		Object[] expectedSet = tempSet.toArray();
+		tempSet = myMeeting.getContacts();
+		Object[] actualSet = tempSet.toArray();
+		assertArrayEquals(expectedSet, actualSet);
+	}
 }
