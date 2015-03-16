@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.Calendar;
 
-
 /**
  * Tests the class MeetingImpl.
  *
