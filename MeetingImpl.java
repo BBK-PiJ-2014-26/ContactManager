@@ -19,7 +19,7 @@ import java.util.Set;
 	 * @param contacts, the set of contacts who will attend the meeting.
 	 * @param date, the date and time of the scheduled meeting.
 	 */
-	public MeetingImpl(Set<Contacts> contacts, Calendar date) {
+	public MeetingImpl(Set<Contact> contacts, Calendar date) {
 		this.contacts = contacts;
 		this.date = date;
 	}
