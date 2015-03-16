@@ -14,6 +14,7 @@ import java.util.Calendar;
  */
 public class MeetingTest {
 	Meeting myMeeting; // A Meeting object to be used in testing.
+	Contact batman, superman; // Contact objects to be used in testings.
 
 	/**
 	 * Instantiates a meeting object for use in testing.
@@ -21,8 +22,10 @@ public class MeetingTest {
 	@Before
 	public void buildUp() {
 		Set<Contact> tempContactSet = new CopyOnWriteArraySet<Contact>();
-		tempContactSet.add(new ContactImpl("Bruce Wayne"));
-		tempContactSet.add(new ContactImpl("Clark Kent"));
+		batman = new ContactImpl("Bruce Wayne");
+		tempContactSet.add(batman);
+		superman = new ContactImpl("Clark Kent");
+		tempContactSet.add(superman);
 		myMeeting = new MeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0));
 	}
 
@@ -57,12 +60,10 @@ public class MeetingTest {
 	 */
 	@Test
 	public void shouldReturnCorrectContactSet() {
-		Set<Contact> tempSet = new CopyOnWriteArraySet<Contact>();
-		tempSet.add(new ContactImpl("Bruce Wayne"));
-		tempSet.add(new ContactImpl("Clark Kent"));
-		Object[] expectedSet = tempSet.toArray();
-		tempSet = myMeeting.getContacts();
-		Object[] actualSet = tempSet.toArray();
-		assertArrayEquals(expectedSet, actualSet);
+		Set<Contact> expectedSet = new CopyOnWriteArraySet<Contact>();
+		expectedSet.add(batman);
+		expectedSet.add(superman);
+		Set<Contact> actualSet = myMeeting.getContacts();
+		assertEquals(expectedSet, actualSet);
 	}
 }
