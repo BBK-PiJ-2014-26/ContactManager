@@ -29,9 +29,24 @@ public class ContactManagerTest {
 	 * Should throw IllegalArgumentException when supplied date is in the past.
 	 */
 	@Test
-	public void shouldThrowIllegalArgumentException() {
+	public void shouldThrowIllegalArgumentExceptionWhenPastDate() {
 		try {
 			myContactManager.addFutureMeeting(testSet, new GregorianCalendar(1900, 1, 1, 10, 15));
+		} catch (IllegalArgumentException ex) {
+			boolean exceptionThrown;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addFutureMeeting().
+	 *
+	 * Should throw IllegalArgumentException when contact does not exist.
+	 */
+	@Test
+	public void shouldThrowIllegalArgumentExceptionWhenContactDoesNotExist() {
+		try {
+			myContactManager.addFutureMeeting(new HashSet<Contact>(new Contact("Harvey Dent")), new GregorianCalendar(1900, 1, 1, 10, 15));
 		} catch (IllegalArgumentException ex) {
 			boolean exceptionThrown;
 		}
