@@ -17,6 +17,7 @@ public class ContactManagerTest {
 	 */
 	@Before
 	public void buildUp() {
+		testSet = new HashSet<Contact>();
 		testSet.add(new Contact("Bruce Wayne"));
 		testSet.add(new Contact("Clark Kent"));
 		myContactManager = new ContactManagerImpl();
@@ -27,6 +28,7 @@ public class ContactManagerTest {
 	 *
 	 * Should throw IllegalArgumentException when supplied date is in the past.
 	 */
+	@Test
 	public void shouldThrowIllegalArgumentException() {
 		try {
 			myContactManager.addFutureMeeting(testSet, new GregorianCalendar(1900, 1, 1, 10, 15));
@@ -36,4 +38,15 @@ public class ContactManagerTest {
 		assertTrue(exceptionThrown);
 	}
 
+	/**
+	 * Tests addFutureMeeting().
+	 *
+	 * Should return expected MeetingId.
+	 */
+	@Test
+	public void shoulfReturnCorrectMeetingID {
+		int expectedId = 1;
+		int actualId = myContactManager.addFutureMeeting(testSet, new GregorianCalendar(1900, 1, 1, 10, 15));
+		assertEquals(expectedId, actualId);
+	}
 }
