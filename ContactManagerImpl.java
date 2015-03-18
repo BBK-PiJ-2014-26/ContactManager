@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
  *
  * @author Gareth Moore
  */
-public class ContactManagerImpl implements ContactManager {
+public class ContactManagerImpl  {
 	/**
 	 * A data structure to store contacts.
 	 */
@@ -24,11 +24,11 @@ public class ContactManagerImpl implements ContactManager {
 
 	int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
-			throw  IllegalArgumentException;
+			throw new IllegalArgumentException();
 		} else {
-			Meeting newMeeting = new FutureMeetingImpl(contacts, date);
-			 int result = futureMeetings.add(newMeeting);
-			 return result;
+			//Meeting newMeeting = new FutureMeetingImpl(contacts, date);
+			//int result = futureMeetings.add(newMeeting);
+			return 1;
 		}
 	}
 
