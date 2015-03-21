@@ -28,7 +28,8 @@ public class ContactManagerTest {
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
 		myContactManager.contacts.add(superman);
-		myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Better World");
+		myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
+				//Should be meetingId = 1
 		myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2015, 11, 26, 10, 5)); //Should be meetingId = 2
 	}
 
@@ -101,7 +102,7 @@ public class ContactManagerTest {
 	 * Should return Null because Meeting does not exist.
 	 */
 	@Test
-	public void shouldReturnNull() {
+	public void shouldReturnNullPastMeeting() {
 		PastMeeting testMeeting = myContactManager.getPastMeeting(10000);
 		assertNull(testMeeting);
 	}
@@ -116,6 +117,33 @@ public class ContactManagerTest {
 		boolean exceptionThrown = false;
 		try {
 			myContactManager.getPastMeeting(2);
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getFutureMeeting().
+	 *
+	 * Should return Null because Meeting does not exist.
+	 */
+	@Test
+	public void shouldReturnNullFutureMeeting() {
+		PastMeeting testMeeting = myContactManager.getFutureMeeting(10000);
+		assertNull(testMeeting);
+	}
+
+	/**
+	 * Tests getFutureMeeting().
+	 *
+	 * Shold throw IllegalArgumentException when meeting is in the past.
+	 */
+	@Test
+	public void shouldReturnExceptionWhenMeetingIsInPast() {
+		boolean exceptionThrown = false;
+		try {
+			myContactManager.getFutureMeeting(1);
 		} catch (IllegalArgumentException ex) {
 			exceptionThrown = true;
 		}
