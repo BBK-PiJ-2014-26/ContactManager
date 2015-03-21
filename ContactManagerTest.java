@@ -19,15 +19,17 @@ public class ContactManagerTest {
 	 */
 	@Before
 	public void buildUp() {
-		Contact testContact1 = new ContactImpl("Bruce Wayne");
-		Contact testContact2 = new ContactImpl("Clark Kent");
+		Contact batman = new ContactImpl("Bruce Wayne");
+		Contact superman = new ContactImpl("Clark Kent");
 		testSet = new HashSet<Contact>();
 		testSet.add(testContact1);
 		testSet.add(testContact2);
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
-		myContactManager.contacts.add(testContact1);
-		myContactManager.contacts.add(testContact2);
+		myContactManager.contacts.add(batman);
+		myContactManager.contacts.add(superman);
+		myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Better World");
+		myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2015, 11, 26, 10, 5)); //Should be meetingId = 2
 	}
 
 	/**
@@ -92,4 +94,32 @@ public class ContactManagerTest {
 		int actualId = myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2020, 1, 1, 10, 15));
 		assertEquals(expectedId, actualId);
 	}
+
+	/**
+	 * Tests getPastMeeting().
+	 *
+	 * Should return Null because Meeting does not exist.
+	 */
+	@Test
+	public void shouldReturnNull() {
+		PastMeeting testMeeting = myContactManager.getPastMeeting(10000);
+		assertNull(testMeeting);
+	}
+
+	/**
+	 * Tests getPastMeeting().
+	 *
+	 * Shold throw IllegalArgumentException when meeting is in the future.
+	 */
+	@Test
+	public void shouldReturnExceptionWhenMeetingIsInFuture() {
+		boolean exceptionThrown = false;
+		try {
+			myContactManager.getPastMeeting(2);
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
 }
