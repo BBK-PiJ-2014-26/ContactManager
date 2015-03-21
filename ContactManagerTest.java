@@ -22,8 +22,8 @@ public class ContactManagerTest {
 		Contact batman = new ContactImpl("Bruce Wayne");
 		Contact superman = new ContactImpl("Clark Kent");
 		testSet = new HashSet<Contact>();
-		testSet.add(testContact1);
-		testSet.add(testContact2);
+		testSet.add(batman);
+		testSet.add(superman);
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
@@ -122,6 +122,18 @@ public class ContactManagerTest {
 		}
 		assertTrue(exceptionThrown);
 	}
+	/**
+	 * Tests getPastMeeting().
+	 *
+	 * Confirms the returned Meeting is correct by validating the Id are the same.
+	 */
+	@Test
+	public void shouldReturnCorrectPastMeeting() {
+		Meeting returnedMeeting = myContactManager.getPastMeeting(1);
+		int actualId = returnedMeeting.getId();
+		int expectedId = 1;
+		assertEquals(expectedId, actualId);
+	}
 
 	/**
 	 * Tests getFutureMeeting().
@@ -148,6 +160,43 @@ public class ContactManagerTest {
 			exceptionThrown = true;
 		}
 		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getFutureMeeting().
+	 *
+	 * Confirms the returned Meeting is correct by validating the IDs are equal.
+	 */
+	@Test
+	public void shouldReturnCorrectFutureMeeting() {
+		Meeting returnedMeeting = myContactManager.getFutureMeeting(2);
+		int actualId = returnedMeeting.getId();
+		int expectedId = 2;
+		assertEquals(expectedId, actualId);
+	}
+
+	/**
+	 * Tests getMeeting().
+	 *
+	 * Should return Null because Meeting does not exist.
+	 */
+	@Test
+	public void shouldReturnNullMeeting() {
+		PastMeeting testMeeting = myContactManager.getFutureMeeting(10000);
+		assertNull(testMeeting);
+	}
+
+	/**
+	 * Tests getMeeting().
+	 *
+	 * Confirms the returned Meeting is correct by validating the Id are equal.
+	 */
+	@Test
+	public void shouldReturnCorrectMeeting() {
+		Meeting returnedMeeting = myContactManager.getMeeting(1);
+		int actualId = returnedMeeting.getId();
+		int expectedId = 1;
+		assertEquals(expectedId, actualId);
 	}
 
 }
