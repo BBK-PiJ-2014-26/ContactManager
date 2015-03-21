@@ -25,11 +25,16 @@ public class ContactManagerImpl  {
 	int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
 			throw new IllegalArgumentException();
+		} else if (!contacts.containsAll(contacts)) { //Validates the supplied sets of contacts. If one does not exist, an exception is thrown.
+			throw new IllegalArgumentException();
 		} else {
 			//Meeting newMeeting = new FutureMeetingImpl(contacts, date);
 			//int result = futureMeetings.add(newMeeting);
 			return 1;
 		}
 	}
+
+
+
 
 }
