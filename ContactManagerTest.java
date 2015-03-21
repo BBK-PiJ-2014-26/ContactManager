@@ -52,7 +52,24 @@ public class ContactManagerTest {
 		try {
 			Set<Contact> mySet = new HashSet<Contact>();
 			mySet.add(new ContactImpl("Harvey Dent"));
-			myContactManager.addFutureMeeting(mySet, new GregorianCalendar(1900, 1, 1, 10, 15));
+			myContactManager.addFutureMeeting(mySet, new GregorianCalendar(2020, 1, 1, 10, 15));
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addFutureMeeting().
+	 *
+	 * Should throw IllegalArgumentException when contact set is empty.
+	 */
+	@Test
+	public void shouldThrowIllegalArgumentExceptionWhenContactDoesNotExist() {
+		boolean exceptionThrown = false;
+		try {
+			Set<Contact> mySet = new HashSet<Contact>();
+			myContactManager.addFutureMeeting(mySet, new GregorianCalendar(2020, 1, 1, 10, 15));
 		} catch (IllegalArgumentException ex) {
 			exceptionThrown = true;
 		}
