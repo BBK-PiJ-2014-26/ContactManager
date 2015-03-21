@@ -19,10 +19,15 @@ public class ContactManagerTest {
 	 */
 	@Before
 	public void buildUp() {
+		Contact testContact1 = new ContactImpl("Bruce Wayne");
+		Contact testContact2 = new ContactImpl("Clark Kent");
 		testSet = new HashSet<Contact>();
-		testSet.add(new ContactImpl("Bruce Wayne"));
-		testSet.add(new ContactImpl("Clark Kent"));
+		testSet.add(testContact1);
+		testSet.add(testContact2);
 		myContactManager = new ContactManagerImpl();
+		myContactManager.contacts = new HashSet<Contact>();
+		myContactManager.contacts.add(testContact1);
+		myContactManager.contacts.add(testContact2);
 	}
 
 	/**
@@ -65,7 +70,7 @@ public class ContactManagerTest {
 	 * Should throw IllegalArgumentException when contact set is empty.
 	 */
 	@Test
-	public void shouldThrowIllegalArgumentExceptionWhenContactDoesNotExist() {
+	public void shouldThrowIllegalArgumentExceptionWhenContactsIsEmpty() {
 		boolean exceptionThrown = false;
 		try {
 			Set<Contact> mySet = new HashSet<Contact>();
@@ -84,7 +89,7 @@ public class ContactManagerTest {
 	@Test
 	public void shouldReturnCorrectMeetingID() {
 		int expectedId = 1;
-		int actualId = myContactManager.addFutureMeeting(testSet, new GregorianCalendar(1900, 1, 1, 10, 15));
+		int actualId = myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2020, 1, 1, 10, 15));
 		assertEquals(expectedId, actualId);
 	}
 }
