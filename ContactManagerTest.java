@@ -14,7 +14,7 @@ import org.junit.After;
 public class ContactManagerTest {
 	ContactManagerImpl myContactManager; //A ContactManager object to be used in testing.
 	Set<Contact> batmanSuperman; // A set of contacts to be used in testing. To be used to create one FutureMeeting and one PastMeeting;
-	Set<Contact> lanternSuperman; //A set of cotnatcs for testing. Will have multiple past and future meetings.
+	Set<Contact> lanternSuperman; //A set of contacts for testing. Will have multiple past and future meetings.
 	Contact batman; //A contact for testing. Will have one future and one past meeting.
 	Contact greenLantern, superman; // Contacts for testing. These contacts should have multiple future and past meetings.
 	Contact wonderWoman; //A contact for testing. Should have no future meetings or past meetings.
@@ -31,17 +31,21 @@ public class ContactManagerTest {
 		batmanSuperman = new HashSet<Contact>();
 		batmanSuperman.add(batman);
 		batmanSuperman.add(superman);
+		lanternSuperman = new HashSet<Contact>();
+		lanternSuperman.add(superman);
+		lanternSuperman.add(greenLantern);
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
 		myContactManager.contacts.add(superman);
 		myContactManger.contacts.add(wonderWoman);
+		myContactManger.contacts.add(greenLantern);
 		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
 				//Should be meeting id = 1
 		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
 				//Should be meeting id = 2
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "The Apokolips problem?");
-				//Should be meetingdis = 3
+				//Should be meeting id = 3
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
 				//Should be meetingdis = 4
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
