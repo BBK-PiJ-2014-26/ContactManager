@@ -249,7 +249,7 @@ public class ContactManagerTest {
 	 * Should throw exception when contact does not exist.
 	 */
 	@Test
-	public void shouldThrowEceptionWhenContactDoesNotExist() {
+	public void shouldThrowEceptionWhenContactDoesNotExistFuture() {
 		Contact theFlash = new ContactImpl("Barry Allen"); //A contact who does not exist on myContactManager.
 		boolean exceptionThrown = false;
 		try {
@@ -296,7 +296,7 @@ public class ContactManagerTest {
 	 * Should throw exception when contact does not exist.
 	 */
 	@Test
-	public void shouldThrowEceptionWhenContactDoesNotExist() {
+	public void shouldThrowExceptionWhenContactDoesNotExistPast() {
 		Contact theFlash = new ContactImpl("Barry Allen"); //A contact who does not exist on myContactManager.
 		boolean exceptionThrown = false;
 		try {
@@ -322,5 +322,57 @@ public class ContactManagerTest {
 		int expectedMeetingId = 1;
 		int actualMeetingId = testMeeting.getId();
 		assertEquals(expectedMeetingId, actualMeetingId);
+	}
+
+	/**
+	 * Tests getFutureMeetingList(Calendar).
+	 *
+	 * Should return an empty list because there are no meeting on Christmas Day 2017.
+	 */
+	@Test
+	public void shouldReturnEmptyFutureListUsingCalendar() {
+		List<Meeting> emptyList = myContactManager.getFutureMeetingList(new GregorianCalendar(2017, 12, 25));
+		assertTrue(emptyList.isEmpty());
+	}
+
+	/**
+	 * Tests getPastMeetingList(Calendar).
+	 *
+	 * Should return an empty list because there are no meeting on Christmas Day 2010.
+	 */
+	@Test
+	public void shouldReturnEmptyPastListUsingCalendar() {
+		List<Meeting> emptyList = myContactManager.getPastMeetingList(new GregorianCalendar(2010, 12, 25));
+		assertTrue(emptyList.isEmpty());
+	}
+
+	/**
+	 * Tests getFutureMeetingList().
+	 *
+	 * Should return a list containing batman's one FutureMeeting.
+	 * Verify by comparing ids.
+	 */
+	@Test
+	public void shouldReturnBatmansFutureMeeting() {
+		List<Meeting> actualList = myContactManager.getFutureMeetingList(new GregorianCalendar(2015, 11, 26));
+		Meeting actualMeeting = actualList.get(0); //List should contain one meeting so the meeting I am checking should be at index 0.
+		int actualId = actualMeeting.getId();
+		int expectedId = 2; //See Before, batman has only one future meeting which should have id 2.
+		assertEquals(expectedId, actualId);
+	}
+
+	/**
+	 * Tests getPastMeetingList().
+	 *
+	 * Should return a list containing batman's one PastMeeting.
+	 * Verify by comparing ids.
+	 */
+	@Test
+	public void shouldReturnBatmansPastMeeting() {
+		List<Meeting> actualList = myContactManager.getPastMeetingList(new GregorianCalendar(2014, 11, 26));
+		Meeting actualMeeting = actualList.get(0); //List should contain one meeting so the meeting I am checking should be at index 0.
+		int actualId = actualMeeting.getId();
+		int expectedId = 1; //See Before, batman has only one Past Meeting which should have id 1.
+		assertEquals(expectedId, actualId);
 	}
 }
