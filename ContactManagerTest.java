@@ -13,14 +13,17 @@ import java.util.HashSet;
 public class ContactManagerTest {
 	ContactManagerImpl myContactManager; //A ContactManager object to be used in testing.
 	Set<Contact> testSet; // A set of contacts to be used in testing.
+	Contact batman, superman; // Contacts for testing. These contacts should have future and past meetings.
+	Contact wonderWoman; //A contact for testing. Should have no future meetings scheduled.
 
 	/**
 	 * Instantiates objects to be used in testing.
 	 */
 	@Before
 	public void buildUp() {
-		Contact batman = new ContactImpl("Bruce Wayne");
-		Contact superman = new ContactImpl("Clark Kent");
+		batman = new ContactImpl("Bruce Wayne");
+		superman = new ContactImpl("Clark Kent");
+		wonderWoman = new ContactImpl("Diana Prince");
 		testSet = new HashSet<Contact>();
 		testSet.add(batman);
 		testSet.add(superman);
@@ -28,9 +31,22 @@ public class ContactManagerTest {
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
 		myContactManager.contacts.add(superman);
+		myContactManger.contacts.add(wonderWoman);
 		myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
 				//Should be meetingId = 1
 		myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2015, 11, 26, 10, 5)); //Should be meetingId = 2
+	}
+
+	/**
+	 * Resets the static variables after each test.
+	 *
+	 * ContactImpl and MeetingImpl contain static variables for tracking their respective iD fields.
+	 * After each test, the static variables are reset to zero to avoid interference.
+	 */
+	@After
+	public void cleanUp() {
+		ContactImpl.iDCounter = 0;
+		MeetingImpl.iDCounter = 0;
 	}
 
 	/**
@@ -199,4 +215,50 @@ public class ContactManagerTest {
 		assertEquals(expectedId, actualId);
 	}
 
+	/**
+	 * Tests getFutureMeetingList().
+	 *
+	 * Should return an empty list because wonderWoman has no future meetings.
+	 */
+	@Test
+	public void shouldReturnEmptyList() {
+		try {
+			List<Meeting> emptyList = myContactManager.getFutureMeetingList(wonderWoman);
+		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
+		assertTrue(emptyList.isEmpty());
+	}
+
+	/**
+	 * Tests getFutureMeetingList().
+	 *
+	 * Should throw exception when contact does not exist.
+	 */
+	@Test
+	public void shouldThrowEceptionWhenContactDoesNotExist() {
+		Contact theFlash = new ContactImpl("Barry Allen"); //A contact who does not exist on myContactManager.
+		boolean exceptionThrown = false;
+		try {
+			myContactManager.getFutureMeetingList(theFlash);
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getFutureMeetingList().
+	 *
+	 * Should return a list containg one meeting.
+	 * Should assert that the Meeting's id is 1.
+	 */
+	@Test
+	public void shouldReturnMeetingId1() {
+		try {
+			List<Meeting> testList = myContactManager.getFutureMeetingList(batman);
+		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
+		Meeting testMeeting = testList.get(0); //List should contain only one meeting, therefore the single meeting should be at index 0.
+		int expectedMeetingId = 1;
+		int actualMeetingId = testMeeting.getId();
+		assertEquals(expectedMeetingId, actualMeetingId);
+	}
 }
