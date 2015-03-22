@@ -15,13 +15,14 @@ import java.util.Calendar;
 public class MeetingTest {
 	Meeting myMeeting; // A Meeting object to be used in testing.
 	Contact batman, superman; // Contact objects to be used in testings.
+	Set<Contact> tempContactSet; //A set of contacts to be used in testing.
 
 	/**
 	 * Instantiates a meeting object for use in testing.
 	 */
 	@Before
 	public void buildUp() {
-		Set<Contact> tempContactSet = new CopyOnWriteArraySet<Contact>();
+		tempContactSet = new CopyOnWriteArraySet<Contact>();
 		batman = new ContactImpl("Bruce Wayne");
 		tempContactSet.add(batman);
 		superman = new ContactImpl("Clark Kent");
@@ -84,13 +85,13 @@ public class MeetingTest {
 	@Test
 	public void shouldReturnId100000() {
 		Meeting testMeeting = null;
-		Calendar myDate = new GregorianCalandar(2015, 3, 22, 10, 5);
+		Calendar myDate = new GregorianCalendar(2015, 3, 22, 10, 5);
 		for (int i = 1; i <= 99999; i++) { //Creates 99999 contact objects. One meeting has been created under the Before method.
 			testMeeting = new MeetingImpl(tempContactSet, myDate);
 			myDate.add(myDate.HOUR, 1); //Increments the date by 1 hour, so meeting are not duplicates.
 		}
 		int expectedId = 100000;
-		int actualId = testContact.getId();
+		int actualId = testMeeting.getId();
 		assertEquals(expectedId, actualId);
 	}
 }

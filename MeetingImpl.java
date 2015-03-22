@@ -7,7 +7,7 @@ import java.util.Set;
  *
  * @author Gareth Moore.
  */
- public class MeetingImpl {
+ public class MeetingImpl implements Meeting{
 	/**
 	 * A unique for each Meeting object.
 	 */
