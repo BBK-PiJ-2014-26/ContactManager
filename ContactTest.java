@@ -16,7 +16,7 @@ public class ContactTest {
 	 */
 	@Before
 	public void buildUp() {
-		myContact = new ContactImpl("Bruce Wayne");
+		myContact = new ContactImpl("Bruce Wayne"); //Should be Id = 1.
 	}
 
 	/**
@@ -25,7 +25,6 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnCorrectId() {
-		buildUp();
 		int expectedId = 1;
 		int actualId = myContact.getId();
 		assertEquals(expectedId, actualId);
@@ -64,5 +63,21 @@ public class ContactTest {
 		String expectedNotes = "";
 		String actualNotes = myContact.getNotes();
 		assertEquals(expectedNotes, actualNotes);
+	}
+
+	/**
+	 * Tests nextId(). nextId() is enacted on each call of the Constructor.
+	 *
+	 * After 100 Contact objects are created, the 100th object should have Id 100.
+	 */
+	@Test
+	public void shouldReturnId100() {
+		Contact newContact;
+		for (int i = 1; i == 100; i++) { //One Contact object has already been created, see buildUp().
+			newContact = ContactImpl("Mirror Master");
+		}
+		int expectediD = 100;
+		int actualId = newContact.getId();
+		assertEquals(expectedId, actualId);
 	}
 }
