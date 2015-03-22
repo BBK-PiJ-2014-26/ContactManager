@@ -25,9 +25,13 @@ public class ContactManagerTest {
 	@Before
 	public void buildUp() {
 		batman = new ContactImpl("Bruce Wayne");
+				//Contact id = 1
 		superman = new ContactImpl("Clark Kent");
+				//Contact id = 2
 		wonderWoman = new ContactImpl("Diana Prince");
+				//Contact id = 3
 		greenLantern = new ContactImpl("Hal Jordan");
+				//Contact id = 4
 		batmanSuperman = new HashSet<Contact>();
 		batmanSuperman.add(batman);
 		batmanSuperman.add(superman);
@@ -37,28 +41,24 @@ public class ContactManagerTest {
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
-				//Contact id = 1
 		myContactManager.contacts.add(superman);
-				//Contact id = 2
 		myContactManger.contacts.add(wonderWoman);
-				//Contact id = 3
 		myContactManger.contacts.add(greenLantern);
-				//Contact id = 4
 		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
-				//Should be meeting id = 1
+				//Meeting id = 1
 		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
-				//Should be meeting id = 2
+				//Meeting id = 2
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "The Apokolips problem?");
-				//Should be meeting id = 3
+				//Meeting id = 3
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
-				//Should be meetingdis = 4
+				//Meeting id = 4
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
-				//Should be meetingdis = 5
+				//Meeting ID = 5
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar());
-				//Should be meeting id = 6
+				//Meeting id = 6
 				//Meeting to occur at current system time. Allows this meeting to be used to test addMeetingNotes().
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2017, 11, 26, 10, 5));
-				//Should be meeting id = 7
+				//Meeting id = 7
 	}
 
 	/**
@@ -597,5 +597,36 @@ public class ContactManagerTest {
 		Set<Contact> testSet = myContactManager.getContacts(5); //Gets a set containg newly added Contact
 		Contact testContact = testSet.get(0); //There is only one member of the set so the contact must lie at index 0.
 		assertEquals("Carter Hall", testContact.getName());
+	}
+
+	/**
+	 * Tests getContacts(int...)
+	 *
+	 * Should throw exception if any of the ids are invalid.
+	 */
+	@Test
+	public void shouldThrowExceptionIfIdIsInvalid() {
+		boolean exceptionThrown = false;
+		try {
+			Set<Contact> testSet = myContactManager.getContacts(1, 2, 100);
+					//100 is an invalid id.
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getContacts(int...)
+	 *
+	 * Verifies the returned Set is correct by checking ids.
+	 */
+	@Test
+	public void shouldReturnCorrectSetOfContacts() {
+		try {
+			Set<Contact> testSet = myContactManager.getContacts(1, 2);
+		} catch (IllegalArgumentException ex) {} //No action required to handle a thrown exception
+		assertTrue(testSet.containsAll(batmanSuperman));
+				//The existing set batmanSuperman should contain exactly the same elements.
 	}
 }
