@@ -73,7 +73,7 @@ public class ContactManagerImpl  {
 	 * @param id, id to be verfied.
 	 * @return true if the meeting is contained with the list.
 	 */
-	public boolean containsFutureMeetingId(int id) {
+	public boolean containsFutureMeetingId(int id) throws IllegalArgumentException {
 		boolean result = false;
 		Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
 			//Must be MeetingImpl because Meeting interface does not have an id variable.
@@ -92,7 +92,7 @@ public class ContactManagerImpl  {
 		return result;
 	}
 
-	public PastMeeting getPastMeeting(int id) {
+	public PastMeeting getPastMeeting(int id) throws IllegalArgumentException {
 		PastMeeting result = null;
 		if (containsFutureMeetingId(id)) {
 			//Checks if the requested meeting id is a FutureMeeting
@@ -103,7 +103,7 @@ public class ContactManagerImpl  {
 			while (!finished) {
 				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
 					PastMeetingImpl temp = listIterator.next();
-					if (temp.getId() == id) { //Tests whether the current iteration's id matches id parameter.
+					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
 					}
@@ -126,7 +126,7 @@ public class ContactManagerImpl  {
 			while (!finished) {
 				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
 					FutureMeetingImpl temp = listIterator.next();
-					if (temp.getId() == id) { //Tests whether the current iteration's id matches id parameter.
+					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
 					}
@@ -134,6 +134,20 @@ public class ContactManagerImpl  {
 					finished = true;
 				}
 			}
+		}
+		return result;
+	}
+
+	public Meeting getMeeting(int id) {
+		Meeting result = null;
+		try {
+			if (containsPastMeetingId(id)) {
+				result = getPastMeeting(id);
+			} else if (containsFutureMeetingId(id)) {
+				result = getFutureMeeting(id);
+			}
+		} catch (IllegalArgumentException ex) {
+			ex.printStackTrace();
 		}
 		return result;
 	}
