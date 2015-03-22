@@ -25,7 +25,7 @@ public class ContactImpl implements Contact {
 	 * When the ContactManager application is restarted,
 	 * the value is reassigned using the most recently used id.
 	 */
-	public static iDCounter;
+	public static int iDCounter = 0;
 
 
 	/**
@@ -42,7 +42,7 @@ public class ContactImpl implements Contact {
 	}
 
 	public int getId() {
-		return 1;
+		return id;
 	}
 
 	public String getName() {
@@ -65,6 +65,7 @@ public class ContactImpl implements Contact {
 	 * Increments the iDCounter by 1.
 	 */
 	public int nextId() {
-		return iDCounter++;
+		iDCounter++;
+		return iDCounter;
 	}
 }

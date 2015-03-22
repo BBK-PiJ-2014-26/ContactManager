@@ -25,8 +25,27 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnCorrectId() {
+		ContactImpl.iDCounter = 0; //Resets iDCounter to 0 to ensure other tests do not interfere.
+		Contact testContact = new ContactImpl("Barry Allen");
 		int expectedId = 1;
-		int actualId = myContact.getId();
+		int actualId = testContact.getId();
+		assertEquals(expectedId, actualId);
+	}
+
+	/**
+	 * Tests nextId(). nextId() is enacted on each call of the Constructor.
+	 *
+	 * After 100 000 Contact objects are created, the 100 000th object should have Id 100 000.
+	 */
+	@Test
+	public void shouldReturnId100000() {
+		ContactImpl.iDCounter = 0; //Resets iDCounter to 0 to ensure other tests do not interfere.
+		Contact testContact = null;
+		for (int i = 1; i <= 100000; i++) { //Creates 100000 contact objects.
+			testContact = new ContactImpl("Mirror Master");
+		}
+		int expectedId = 100000;
+		int actualId = testContact.getId();
 		assertEquals(expectedId, actualId);
 	}
 
@@ -47,7 +66,6 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnCorrectNotes() {
-		buildUp();
 		myContact.addNotes("We better catch that pesky Joker.");
 		String expectedNotes = "We better catch that pesky Joker.";
 		String actualNotes = myContact.getNotes();
@@ -65,19 +83,5 @@ public class ContactTest {
 		assertEquals(expectedNotes, actualNotes);
 	}
 
-	/**
-	 * Tests nextId(). nextId() is enacted on each call of the Constructor.
-	 *
-	 * After 100 Contact objects are created, the 100th object should have Id 100.
-	 */
-	@Test
-	public void shouldReturnId100() {
-		Contact newContact;
-		for (int i = 1; i == 100; i++) { //One Contact object has already been created, see buildUp().
-			newContact = ContactImpl("Mirror Master");
-		}
-		int expectediD = 100;
-		int actualId = newContact.getId();
-		assertEquals(expectedId, actualId);
-	}
+
 }
