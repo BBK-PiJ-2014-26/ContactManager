@@ -1,6 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.After;
 
 /**
  * Tests the class Contact.
@@ -20,15 +21,22 @@ public class ContactTest {
 	}
 
 	/**
+	 * iDCounter is a static variable so may interfere with test results.
+	 * To avoid this problem, iDCounter is rest to 0 after each test.
+	 */
+	@After
+	public void cleanUp() {
+		ContactImpl.iDCounter = 0;
+	}
+
+	/**
 	 * Tests getId().
 	 * The returned contact ID should match the ID assigned during instantiation.
 	 */
 	@Test
 	public void shouldReturnCorrectId() {
-		ContactImpl.iDCounter = 0; //Resets iDCounter to 0 to ensure other tests do not interfere.
-		Contact testContact = new ContactImpl("Barry Allen");
 		int expectedId = 1;
-		int actualId = testContact.getId();
+		int actualId = myContact.getId();
 		assertEquals(expectedId, actualId);
 	}
 
@@ -39,9 +47,8 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnId100000() {
-		ContactImpl.iDCounter = 0; //Resets iDCounter to 0 to ensure other tests do not interfere.
 		Contact testContact = null;
-		for (int i = 1; i <= 100000; i++) { //Creates 100000 contact objects.
+		for (int i = 1; i <= 99999; i++) { //Creates 99999 contact objects. 1 object was created before test.
 			testContact = new ContactImpl("Mirror Master");
 		}
 		int expectedId = 100000;
