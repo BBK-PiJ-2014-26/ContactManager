@@ -92,20 +92,26 @@ public class ContactManagerImpl  {
 		return result;
 	}
 
-	/*public PastMeeting getPastMeeting(int id) {
+	public PastMeeting getPastMeeting(int id) {
 		PastMeeting result = null;
-		Iterator<PastMeting> listIterator = pastMeetings.iterator();
-		boolean finished = false;
-		while (!finished) {
-			if (listIterator.id == id) { //Tests whether the current iteration's id matches id parameter.
-				result = listIterator;
-				finished = true;
-			} else if (!listIterator.hasNext()){ //Tests whether the end of the list has been reached.
-				finished = true;
-			} else {
-				listIterator = listIterator.next();
+		if (containsFutureMeetingId(id)) {
+			//Checks if the requested meeting id is a FutureMeeting
+			throw new IllegalArgumentException();
+		} else {
+			Iterator<PastMeetingImpl> listIterator = pastMeetings.iterator();
+			boolean finished = false;
+			while (!finished) {
+				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
+					PastMeetingImpl temp = listIterator.next();
+					if (temp.getId() == id) { //Tests whether the current iteration's id matches id parameter.
+						result = temp;
+						finished = true;
+					}
+				} else {
+					finished = true;
+				}
 			}
 		}
 		return result;
-	}*/
+	}
 }
