@@ -507,19 +507,37 @@ public class ContactManagerTest {
 	/**
 	 * Tests addMeetingNotes()
 	 *
-	 * Should throw exception if notes is null.
+	 * Should throw an exception if Meeting is a FutureMeeting.
 	 */
 	@Test
-	public void shouldThrowExceptionWhenMeetingIdIsNull() {
+	public void shouldThrowExceptionWhenMeetingIsFutureMeeting() {
 		boolean exceptionThrown = false;
 		try {
-			addMeetingNotes(6, "Rogue's Gallery");
-				//Meeting id 6 is sceduled for the current system time.
-				//So it should be in the past by the time of this method call.
+			addMeetingNotes(7, "Rogue's Gallery");
+				//Meeting id 7 is scheduled for the future.
 		} catch (IllegalStateException ex) {
 			exceptionThrown = true;
 		} catch (NullPointerException ex) {
 		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
 		assertTrue(exceptionThrown);
+	}
+}
+
+	/**
+	 * Tests addMeetingNotes()
+	 *
+	 * Verfies that notes were added successfully.
+	 */
+	@Test
+	public void shouldAddNotesSuccessfully() {
+		try {
+			addMeetingNotes(6, "Rogue's Gallery");
+				//Meeting id 6 is sceduled for the current system time.
+				//So it should be in the past by the time of this method call.
+		} catch (IllegalStateException ex) {
+		} catch (NullPointerException ex) {
+		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
+		PastMeeting testMeeting = myContactManager.getPastMeeting(6);
+		assertEquals("Rogue's Gallery", testMeeting.getNotes());
 	}
 }
