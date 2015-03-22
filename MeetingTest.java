@@ -1,6 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.After;
 import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -26,6 +27,15 @@ public class MeetingTest {
 		superman = new ContactImpl("Clark Kent");
 		tempContactSet.add(superman);
 		myMeeting = new MeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0));
+	}
+
+	/**
+	 * iDCounter is as static variable therefore it may interfere with test results.
+	 * To avoiid this problem, iDCounter is reset to 0 after each test.
+	 */
+	@After
+	public void cleanUp() {
+		MeetingImpl.iDCounter = 0;
 	}
 
 	/**
@@ -64,5 +74,23 @@ public class MeetingTest {
 		expectedSet.add(superman);
 		Set<Contact> actualSet = myMeeting.getContacts();
 		assertEquals(expectedSet, actualSet);
+	}
+
+	/**
+	 * Tests nextId(). nextId() is enacted on each call of the Constructor.
+	 *
+	 * After 100 000 Contact objects are created, the 100 000th object should have Id 100 000.
+	 */
+	@Test
+	public void shouldReturnId100000() {
+		Meeting testMeeting = null;
+		Calendar myDate = new GregorianCalandar(2015, 3, 22, 10, 5);
+		for (int i = 1; i <= 99999; i++) { //Creates 99999 contact objects. One meeting has been created under the Before method.
+			testMeeting = new MeetingImpl(tempContactSet, myDate);
+			myDate.add(myDate.HOUR, 1); //Increments the date by 1 hour, so meeting are not duplicates.
+		}
+		int expectedId = 100000;
+		int actualId = testContact.getId();
+		assertEquals(expectedId, actualId);
 	}
 }
