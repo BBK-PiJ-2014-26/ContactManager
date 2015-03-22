@@ -114,4 +114,27 @@ public class ContactManagerImpl  {
 		}
 		return result;
 	}
+
+	public FutureMeeting getFutureMeeting(int id) {
+		FutureMeeting result = null;
+		if (containsPastMeetingId(id)) {
+			//Checks if the requested meeting id is a PastMeeting
+			throw new IllegalArgumentException();
+		} else {
+			Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+			boolean finished = false;
+			while (!finished) {
+				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
+					FutureMeetingImpl temp = listIterator.next();
+					if (temp.getId() == id) { //Tests whether the current iteration's id matches id parameter.
+						result = temp;
+						finished = true;
+					}
+				} else {
+					finished = true;
+				}
+			}
+		}
+		return result;
+	}
 }
