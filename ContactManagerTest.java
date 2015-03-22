@@ -37,9 +37,13 @@ public class ContactManagerTest {
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
+				//Contact id = 1
 		myContactManager.contacts.add(superman);
+				//Contact id = 2
 		myContactManger.contacts.add(wonderWoman);
+				//Contact id = 3
 		myContactManger.contacts.add(greenLantern);
+				//Contact id = 4
 		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
 				//Should be meeting id = 1
 		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
@@ -543,5 +547,55 @@ public class ContactManagerTest {
 		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
 		PastMeeting testMeeting = myContactManager.getPastMeeting(6);
 		assertEquals("Rogue's Gallery", testMeeting.getNotes());
+	}
+
+	/**
+	 * Tests addNewContact()
+	 *
+	 * Should throw exception if name is null.
+	 */
+	@Test
+	public void shouldThrowExceptionIfNameIsNull() {
+		boolean exceptionThrown = false;
+		String name = null;
+		try {
+			myContactManager.addNewContact(name, "Welcome to Thanagar.");
+		} catch (NullPointerException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addNewContact()
+	 *
+	 * Should throw exception if notes is null.
+	 */
+	@Test
+	public void shouldThrowExceptionIfNotesIsNull() {
+		boolean exceptionThrown = false;
+		String notes = null;
+		try {
+			myContactManager.addNewContact("Carter Hall", notes);
+		} catch (NullPointerException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addNewContact()
+	 *
+	 * Verify Contact is added correctly by checking name field.
+	 */
+	@Test
+	public void shouldAddContactCorrectly() {
+		try {
+			myContactManager.addNewContact("Carter Hall", "Welcome to Thanagar");
+					//Contact id will equal 5
+		} catch (NullPointerException ex) {} //No action required if exception is caught
+		Set<Contact> testSet = myContactManager.getContacts(5); //Gets a set containg newly added Contact
+		Contact testContact = testSet.get(0); //There is only one member of the set so the contact must lie at index 0.
+		assertEquals("Carter Hall", testContact.getName());
 	}
 }
