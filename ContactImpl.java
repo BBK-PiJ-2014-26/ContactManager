@@ -4,18 +4,41 @@
  * @author Gareth Moore.
  */
 public class ContactImpl implements Contact {
-
-	private int Id;
+	/**
+	 * A unique id for every Contact object.
+	 * Cannot be negative number or zero.
+	 */
+	private int id;
+	/**
+	 * The name of each Contact object.
+	 * It is not necessarily unique.
+	 */
 	private String name;
+	/**
+	 * Meeting notes to be held against each contact.
+	 * If not relevaant, a null value is held.
+	 */
 	private String notes;
+	/**
+	 * A static counter which tracks the most recently used id.
+	 * Each time a constructor is called, a nextId() call increments the counter.
+	 * When the ContactManager application is restarted,
+	 * the value is reassigned using the most recently used id.
+	 */
+	public static iDCounter;
+
 
 	/**
 	 * Contstructor method. Creates a Contact object.
+	 *
+	 * On every call, a unique id is assigned using nextId().
 	 *
 	 * @param name is the name of the newly created contact.
 	 */
 	public ContactImpl(String name) {
 		this.name = name;
+		this.notes = null;
+		this.id = nextId();
 	}
 
 	public int getId() {
@@ -36,5 +59,12 @@ public class ContactImpl implements Contact {
 
 	public void addNotes(String note) {
 		this.notes = note;
+	}
+
+	/**
+	 * Increments the iDCounter by 1.
+	 */
+	public int nextId() {
+		return iDCounter++;
 	}
 }
