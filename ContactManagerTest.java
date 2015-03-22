@@ -46,8 +46,9 @@ public class ContactManagerTest {
 				//Should be meetingdis = 4
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
 				//Should be meetingdis = 5
-		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2016, 11, 26, 10, 5));
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar());
 				//Should be meeting id = 6
+				//Meeting to occur at current system time. Allows this meeting to be used to test addMeetingNotes().
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2017, 11, 26, 10, 5));
 				//Should be meeting id = 7
 	}
@@ -447,4 +448,78 @@ public class ContactManagerTest {
 		assertEquals("Brightest Day", actualText);
 	}
 
+	/**
+	 * Tests addMeetingNotes()
+	 *
+	 * Should throw exception if meeting id does not exist.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenMeetingIdDoesNotExist() {
+		boolean exceptionThrown = false;
+		try {
+			addMeetingNotes(10000, "Rogue's Gallery"); //10000 is an invalid meeting id.
+		} catch (IllegalStateException ex) {
+		} catch (NullPointerException ex) { //No action required if these exceptions are thrown.
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addMeetingNotes()
+	 *
+	 * Should throw exception if meeting id is null.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenMeetingIdIsNull() {
+		boolean exceptionThrown = false;
+		int id = null;
+		try {
+			addMeetingNotes(id, "Rogue's Gallery");
+		} catch (NullPointerException ex) {
+			exceptionThrown = true;
+		} catch (IllegalStateException ex) {
+		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addMeetingNotes()
+	 *
+	 * Should throw exception if notes is null.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenMeetingIdIsNull() {
+		boolean exceptionThrown = false;
+		String notes = null;
+		try {
+			addMeetingNotes(6, notes);
+				//Meeting id 6 is sceduled for the current system time.
+				//So it should be in the past by the time of this method call.
+		} catch (NullPointerException ex) {
+			exceptionThrown = true;
+		} catch (IllegalStateException ex) {
+		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addMeetingNotes()
+	 *
+	 * Should throw exception if notes is null.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenMeetingIdIsNull() {
+		boolean exceptionThrown = false;
+		try {
+			addMeetingNotes(6, "Rogue's Gallery");
+				//Meeting id 6 is sceduled for the current system time.
+				//So it should be in the past by the time of this method call.
+		} catch (IllegalStateException ex) {
+			exceptionThrown = true;
+		} catch (NullPointerException ex) {
+		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
+		assertTrue(exceptionThrown);
+	}
 }
