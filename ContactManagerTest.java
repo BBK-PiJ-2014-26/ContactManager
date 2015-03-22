@@ -4,6 +4,7 @@ import org.junit.Before;
 import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.HashSet;
+import org.junit.After;
 
 /**
  * Tests the class ContactManagerImpl.
@@ -12,8 +13,10 @@ import java.util.HashSet;
  */
 public class ContactManagerTest {
 	ContactManagerImpl myContactManager; //A ContactManager object to be used in testing.
-	Set<Contact> testSet; // A set of contacts to be used in testing.
-	Contact batman, superman; // Contacts for testing. These contacts should have future and past meetings.
+	Set<Contact> batmanSuperman; // A set of contacts to be used in testing. To be used to create one FutureMeeting and one PastMeeting;
+	Set<Contact> lanternSuperman; //A set of cotnatcs for testing. Will have multiple past and future meetings.
+	Contact batman; //A contact for testing. Will have one future and one past meeting.
+	Contact greenLantern, superman; // Contacts for testing. These contacts should have multiple future and past meetings.
 	Contact wonderWoman; //A contact for testing. Should have no future meetings or past meetings.
 
 	/**
@@ -24,17 +27,29 @@ public class ContactManagerTest {
 		batman = new ContactImpl("Bruce Wayne");
 		superman = new ContactImpl("Clark Kent");
 		wonderWoman = new ContactImpl("Diana Prince");
-		testSet = new HashSet<Contact>();
-		testSet.add(batman);
-		testSet.add(superman);
+		greenLantern = new ContactImpl("Hal Jordan");
+		batmanSuperman = new HashSet<Contact>();
+		batmanSuperman.add(batman);
+		batmanSuperman.add(superman);
 		myContactManager = new ContactManagerImpl();
 		myContactManager.contacts = new HashSet<Contact>();
 		myContactManager.contacts.add(batman);
 		myContactManager.contacts.add(superman);
 		myContactManger.contacts.add(wonderWoman);
-		myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
-				//Should be meetingId = 1
-		myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2015, 11, 26, 10, 5)); //Should be meetingId = 2
+		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
+				//Should be meeting id = 1
+		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
+				//Should be meeting id = 2
+		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "The Apokolips problem?");
+				//Should be meetingdis = 3
+		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
+				//Should be meetingdis = 4
+		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
+				//Should be meetingdis = 5
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2016, 11, 26, 10, 5));
+				//Should be meeting id = 2
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2017, 11, 26, 10, 5));
+				//Should be meeting id = 2
 	}
 
 	/**
@@ -58,7 +73,7 @@ public class ContactManagerTest {
 	public void shouldThrowIllegalArgumentExceptionWhenPastDate() {
 		boolean exceptionThrown = false;
 		try {
-			myContactManager.addFutureMeeting(testSet, new GregorianCalendar(1900, 1, 1, 10, 15));
+			myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(1900, 1, 1, 10, 15));
 		} catch (IllegalArgumentException ex) {
 			exceptionThrown = true;
 		}
@@ -108,7 +123,7 @@ public class ContactManagerTest {
 	@Test
 	public void shouldReturnCorrectMeetingID() {
 		int expectedId = 1;
-		int actualId = myContactManager.addFutureMeeting(testSet, new GregorianCalendar(2020, 1, 1, 10, 15));
+		int actualId = myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2020, 1, 1, 10, 15));
 		assertEquals(expectedId, actualId);
 	}
 
