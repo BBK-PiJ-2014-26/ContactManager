@@ -14,7 +14,7 @@ public class ContactManagerTest {
 	ContactManagerImpl myContactManager; //A ContactManager object to be used in testing.
 	Set<Contact> testSet; // A set of contacts to be used in testing.
 	Contact batman, superman; // Contacts for testing. These contacts should have future and past meetings.
-	Contact wonderWoman; //A contact for testing. Should have no future meetings scheduled.
+	Contact wonderWoman; //A contact for testing. Should have no future meetings or past meetings.
 
 	/**
 	 * Instantiates objects to be used in testing.
@@ -216,7 +216,7 @@ public class ContactManagerTest {
 	}
 
 	/**
-	 * Tests getFutureMeetingList().
+	 * Tests getFutureMeetingList(Contact).
 	 *
 	 * Should return an empty list because wonderWoman has no future meetings.
 	 */
@@ -229,7 +229,7 @@ public class ContactManagerTest {
 	}
 
 	/**
-	 * Tests getFutureMeetingList().
+	 * Tests getFutureMeetingList(Contact).
 	 *
 	 * Should throw exception when contact does not exist.
 	 */
@@ -246,7 +246,54 @@ public class ContactManagerTest {
 	}
 
 	/**
-	 * Tests getFutureMeetingList().
+	 * Tests getFutureMeetingList(Contact).
+	 *
+	 * Should return a list containg one meeting.
+	 * Should assert that the Meeting's id is 1.
+	 */
+	@Test
+	public void shouldReturnMeetingId2() {
+		try {
+			List<Meeting> testList = myContactManager.getFutureMeetingList(batman);
+		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
+		Meeting testMeeting = testList.get(0); //List should contain only one meeting, therefore the single meeting should be at index 0.
+		int expectedMeetingId = 2;
+		int actualMeetingId = testMeeting.getId();
+		assertEquals(expectedMeetingId, actualMeetingId);
+	}
+
+	/**
+	 * Tests getPastMeetingList(Contact).
+	 *
+	 * Should return an empty list because wonderWoman has no future meetings.
+	 */
+	@Test
+	public void shouldReturnEmptyList() {
+		try {
+			List<Meeting> emptyList = myContactManager.getPastMeetingList(wonderWoman);
+		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
+		assertTrue(emptyList.isEmpty());
+	}
+
+	/**
+	 * Tests getPastMeetingList(Contact).
+	 *
+	 * Should throw exception when contact does not exist.
+	 */
+	@Test
+	public void shouldThrowEceptionWhenContactDoesNotExist() {
+		Contact theFlash = new ContactImpl("Barry Allen"); //A contact who does not exist on myContactManager.
+		boolean exceptionThrown = false;
+		try {
+			myContactManager.getPastMeetingList(theFlash);
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getPastMeetingList(Contact).
 	 *
 	 * Should return a list containg one meeting.
 	 * Should assert that the Meeting's id is 1.
@@ -254,7 +301,7 @@ public class ContactManagerTest {
 	@Test
 	public void shouldReturnMeetingId1() {
 		try {
-			List<Meeting> testList = myContactManager.getFutureMeetingList(batman);
+			List<Meeting> testList = myContactManager.getPastMeetingList(batman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
 		Meeting testMeeting = testList.get(0); //List should contain only one meeting, therefore the single meeting should be at index 0.
 		int expectedMeetingId = 1;
