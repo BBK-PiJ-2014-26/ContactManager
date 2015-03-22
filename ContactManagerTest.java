@@ -629,4 +629,58 @@ public class ContactManagerTest {
 		assertTrue(testSet.containsAll(batmanSuperman));
 				//The existing set batmanSuperman should contain exactly the same elements.
 	}
+
+	/**
+	 * Tests getContacts(String)
+	 *
+	 * Should throw exception if name is null.
+	 */
+	@Test
+	public void shouldThrowExceptionIfNameIsNull() {
+		boolean exceptionThrown = false;
+		String name = null;
+		try {
+			Set<Contact> testSet = myContactManager.getContacts(name);
+		} catch (NullPointerException ex) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests getContacts(String)
+	 *
+	 * Verifies the returned Set is correct by checking id.
+	 */
+	@Test
+	public void shouldReturnCorrectSetOfContactsUsingName() {
+		try {
+			Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+				//Bruce Wayne refers to Contact batman whose id is 1
+		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
+		Contact testContact = testSet.get(0);
+				//The returned set should only contain one element therefore it should exist at index 0
+		assertEquals(1, testContact.getId())l
+	}
+
+	/**
+	 * Tests getContacts(String)
+	 *
+	 * Verifies that when more than one Contact has the same name
+	 * all of the Contacts are returned.
+	 * This test adds a new "Bruce Wayne.@
+	 * A set of two Contacts should be returned.
+	 */
+	@Test
+	public void shouldReturnASetOf2Contacts() {
+		myContactManager.Contacts.add(new ContactImpl("Bruce Wayne"));
+				//Adds new contact with the name Bruce Wayne
+		try {
+			Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+				//Removes all the Contacts with the name Bruce Wayne
+		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
+		Contact testContact = testSet.get(0);
+		assertEquals(2, testContact.size());
+				//Verifies that the returned set contains two Contacts
+	}
 }
