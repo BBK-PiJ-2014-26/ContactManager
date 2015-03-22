@@ -439,7 +439,7 @@ public class ContactManagerTest {
 		assertTrue(exceptionThrown);
 	}
 
-`	/**
+	/**
 	 * Tests addNewPastMeeting().
 	 *
 	 * Verifies a new PastMeeting has been entered by checking its text field.
@@ -683,4 +683,65 @@ public class ContactManagerTest {
 		assertEquals(2, testContact.size());
 				//Verifies that the returned set contains two Contacts
 	}
+
+	/**
+	 * Tests containsPastMeetingId()
+	 *
+	 * Should return false when checking id 7 which is a FutureMeeting.
+	 */
+	@Test
+	public void shouldReturnFasleIfIdIsFutureMeeting() {
+		assertFalse(myContactManager.containsPastMeetingId(7);
+	}
+
+	/**
+	 * Tests containsPastMeetingId()
+	 *
+	 * Should return true when checking meeting id 3.
+	 */
+	@Test
+	public void shouldReturnTrueIfPastMeetingExists() {
+		assertTrue(myContactManager.containsPastMeetingId(3);
+	}
+
+	/**
+	 * Tests containsPastMeetingId()
+	 *
+	 * Should return false when checking id 100 does not exist.
+	 */
+	@Test
+	public void shouldReturnFasleIfPastMeetingDoesNotExist() {
+		assertFalse(myContactManager.containsPastMeetingId(7);
+	}
+
+	/**
+	 * Tests containsFutureMeetingId()
+	 *
+	 * Should return false when checking id 3 which is a PastMeeting.
+	 */
+	@Test
+	public void shouldReturnFasleIfIdIsFutureMeeting() {
+		assertFalse(myContactManager.containsFutureMeetingId(3);
+	}
+
+	/**
+	 * Tests containsFutureMeetingId()
+	 *
+	 * Should return true when checking meeting id 7.
+	 */
+	@Test
+	public void shouldReturnTrueIfFutureMeetingExists() {
+		assertTrue(myContactManager.containsFutureMeetingId(7);
+	}
+
+	/**
+	 * Tests containsFutureMeetingId()
+	 *
+	 * Should return false when checking id 100 which does not exist.
+	 */
+	@Test
+	public void shouldReturnFalseIfFutureMeetingDoesNotExist() {
+		assertFalse(myContactManager.containsFutureMeetingId(100);
+	}
+
 }
