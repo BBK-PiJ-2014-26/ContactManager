@@ -47,9 +47,9 @@ public class ContactManagerTest {
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
 				//Should be meetingdis = 5
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2016, 11, 26, 10, 5));
-				//Should be meeting id = 2
+				//Should be meeting id = 6
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2017, 11, 26, 10, 5));
-				//Should be meeting id = 2
+				//Should be meeting id = 7
 	}
 
 	/**
@@ -362,17 +362,89 @@ public class ContactManagerTest {
 	}
 
 	/**
-	 * Tests getPastMeetingList().
+	 * Tests addNewPastMeeting().
 	 *
-	 * Should return a list containing batman's one PastMeeting.
-	 * Verify by comparing ids.
+	 * Should throw exception if a null list of notes is entered.
 	 */
 	@Test
-	public void shouldReturnBatmansPastMeeting() {
-		List<Meeting> actualList = myContactManager.getPastMeetingList(new GregorianCalendar(2014, 11, 26));
-		Meeting actualMeeting = actualList.get(0); //List should contain one meeting so the meeting I am checking should be at index 0.
-		int actualId = actualMeeting.getId();
-		int expectedId = 1; //See Before, batman has only one Past Meeting which should have id 1.
-		assertEquals(expectedId, actualId);
+	public void shouldThrowExceptionWhenNullNotes() {
+		boolean exceptionThrown = false;
+		String notes = null;
+		try {
+			myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 1, 10, 30), notes);
+		} catch (NullPointerException ex) {
+			exceptionThrown =  true;
+		} catch (IllegalArgumentException ex) {} //No action required if this exception is thrown.
+		assertTrue(exceptionThrown);
 	}
+
+	/**
+	 * Tests addNewPastMeeting().
+	 *
+	 * Should throw exception if a null Calendar is entered.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenNullNotes() {
+		boolean exceptionThrown = false;
+		Calendar date = null;
+		try {
+			myContactManager.addNewPastMeeting(lanternSuperman, date, "Brightest Day");
+		} catch (NullPointerException ex) {
+			exceptionThrown =  true;
+		} catch (IllegalArgumentException ex) {} //No action required if this exception is thrown.
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addNewPastMeeting().
+	 *
+	 * Should throw exception if a empty set is entered.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenEmptySet() {
+		boolean exceptionThrown = false;
+		Set<Contact> testSet =  new HashSet<Contact>();
+		try {
+			myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2012, 10, 1, 10, 30), "Brightest Day");
+		} catch (NullPointerException ex) { //No action required if this exception is thrown.
+		} catch (IllegalArgumentException ex) {
+			exceptionThrown =  true;
+		}
+		assertTrue(exceptionThrown);
+	}
+
+	/**
+	 * Tests addNewPastMeeting().
+	 *
+	 * Should throw exception if a null set is entered.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenNullSet() {
+		boolean exceptionThrown = false;
+		Set<Contact> testSet =  null;
+		try {
+			myContactManager.addNewPastMeeting(testSet, new GregorianCalendar(2012, 10, 1, 10, 30), "Brightest Day");
+		} catch (NullPointerException ex) {
+			exceptionThrown =  true;
+		} catch (IllegalArgumentException ex) {} //No action required if this exception is thrown.
+		assertTrue(exceptionThrown);
+	}
+
+`	/**
+	 * Tests addNewPastMeeting().
+	 *
+	 * Verifies a new PastMeeting has been entered by checking its text field.
+	 */
+	@Test
+	public void shouldThrowExceptionWhenNullSet() {
+		try {
+			myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 1, 10, 30), "Brightest Day");
+				//Should be meeting id = 8.
+		} catch (NullPointerException ex) {
+		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
+		PastMeeting testMeeting = myContactManager.getPastMeeting(8);
+		String actualText = testMeeting.getNotes();
+		assertEquals("Brightest Day", actualText);
+	}
+
 }
