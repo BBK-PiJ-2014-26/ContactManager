@@ -196,4 +196,20 @@ public class ContactManagerImpl  {
 		}
 		return list;
 	}
+
+	public List<Meeting> getFutureMeetingList(Calendar date) {
+		List<Meeting> result = new ArrayList<Meeting>();
+		Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+		while (listIterator.hasNext()) {
+			FutureMeetingImpl tempMeeting = listIterator.next();
+			Calendar tempDate = tempMeeting.getDate();
+			if (tempDate.equals(date)) { //Tests if the parameter matches the date of this meeting
+				result.add(tempMeeting); //If dates match, the meeting is added to the list.
+			}
+		}
+		if (!result.isEmpty()) { //Tests to see if the list is empty. If false, the list is ordered by date.
+			result = ContactManagerImpl.bubbleSortByDate(result);
+		}
+		return result;
+	}
 }
