@@ -8,7 +8,9 @@ import java.util.Set;
  * @author Gareth Moore
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
-
+	/**
+	 * A notes field which holds notes about this PastMeeting.
+	 */
 	private String notes;
 
 	/**
