@@ -74,7 +74,7 @@ public class ContactManagerImpl  {
 	 * @param id, id to be verfied.
 	 * @return true if the meeting is contained within the list.
 	 */
-	public boolean containsFutureMeetingId(int id) throws IllegalArgumentException {
+	public boolean containsFutureMeetingId(int id) {
 		boolean result = false;
 		Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
 			//Must be MeetingImpl because Meeting interface does not have an id variable.
@@ -275,4 +275,22 @@ public class ContactManagerImpl  {
 			pastMeetings.add(new PastMeetingImpl(contacts, date, text));
 		}
 	}
+
+	public void addMeetingNotes(int id, String text) throws IllegalArgumentException, NullPointerException, IllegalStateException {
+		if (!containsPastMeetingId(id) && !containsFutureMeetingId(id)) {
+			//Tests whether the meeting is not on the pastMeetings and not on the futureMeetings list.
+			//If true, an exception is thrown.
+			throw new IllegalArgumentException();
+		} else if (text.equals(null)) {
+			//Tests whether text is null
+			//If true, an exception is thrown.
+			throw new NullPointerException();
+		} else if (containsPastMeetingId(id)) {
+			//Tests whether id is on the pastMeetings list.
+			//If true, notes are added to that PastMeeting's notes field.
+			//If PastMeeting already has notes, those notes are overwritten.
+			PastMeetingImpl temp = getPastMeeting(id);
+			temp.
+
+
 }
