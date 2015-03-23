@@ -1,6 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.After;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.util.Set;
@@ -15,18 +16,29 @@ public class PastMeetingTest {
 
 	PastMeeting myPastMeeting; //A PastMeeting object for testing purposes.
 	Contact batman, superman; // Contact object for testing.
+	Set<Contact> tempContactSet; //Set of contacts to be used in testing
 
 	/**
 	 * Instantiates a PastMeeting object for testing.
 	 */
 	@Before
 	public void buildUp() {
-		Set<Contact> tempContactSet = new CopyOnWriteArraySet<Contact>();
+		tempContactSet = new CopyOnWriteArraySet<Contact>();
 		batman = new ContactImpl("Bruce Wayne");
 		tempContactSet.add(batman);
 		superman = new ContactImpl("Clark Kent");
 		tempContactSet.add(superman);
 		myPastMeeting = new PastMeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0), "Scarecrow has escaped");
+	}
+
+	/**
+	 * PastMeetingImpl has a static variable called iDCounter.
+	 * This method resets the iDCounter to 0.
+	 * This avoids interference from other tests.
+	 */
+	@After
+	public void cleanUp() {
+		MeetingImpl.iDCounter = 0;
 	}
 
 	/**
@@ -77,5 +89,18 @@ public class PastMeetingTest {
 		expectedSet.add(superman);
 		Set<Contact> actualSet = myPastMeeting.getContacts();
 		assertEquals(expectedSet, actualSet);
+	}
+
+	/**
+	 * Tests addNotes().
+	 *
+	 * Should add notes correctly.
+	 */
+	@Test
+	public void shouldAddMeetingNotes() {
+		PastMeetingImpl temp = new PastMeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0), "Scarecrow has escaped");
+			//Need to use PastMeetingImpl because addNotes is not on the PastMeeting interface.
+		temp.addNotes("Scarecrow has been recaptured");
+		assertEquals("Scarecrow has been recaptured", temp.getNotes());
 	}
 }
