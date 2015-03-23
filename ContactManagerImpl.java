@@ -1,5 +1,6 @@
 import java.util.Calendar;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -46,7 +47,7 @@ public class ContactManagerImpl  {
 	 * Verfies whether the Meeting id exists in the pastMeetings list.
 	 *
 	 * @param id, id to be verfied.
-	 * @return true if the meeting is contained with the list.
+	 * @return true if the meeting is contained within the list.
 	 */
 	public boolean containsPastMeetingId(int id) {
 		boolean result = false;
@@ -71,7 +72,7 @@ public class ContactManagerImpl  {
 	 * Verfies whether the Meeting id exists in the futureMeetings list.
 	 *
 	 * @param id, id to be verfied.
-	 * @return true if the meeting is contained with the list.
+	 * @return true if the meeting is contained within the list.
 	 */
 	public boolean containsFutureMeetingId(int id) throws IllegalArgumentException {
 		boolean result = false;
@@ -150,5 +151,49 @@ public class ContactManagerImpl  {
 			ex.printStackTrace();
 		}
 		return result;
+	}
+
+	public List<Meeting> getFutureMeetingList(Contact contact) throws IllegalArgumentException  {
+		if (!contacts.contains(contact)) { //Checks whether the contact is a member of the set contacts.
+			throw new IllegalArgumentException();
+		} else {
+			List<Meeting> result = new ArrayList<Meeting>();
+			Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+			while (listIterator.hasNext()) {
+				FutureMeetingImpl tempMeeting = listIterator.next();
+				Set<Contact> tempSet = tempMeeting.getContacts();
+				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
+					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to our list.
+				}
+			}
+			if (!result.isEmpty()) { //Tests to see if the list is empty. If false, the list is ordered by date.
+				result = ContactManagerImpl.bubbleSortByDate(result);
+			}
+			return result;
+		}
+	}
+
+	/**
+	 * Takes a List of Meetings and orders the elements by date.
+	 * Uses bubble sort.
+	 *
+	 * @param list the list to be ordered.
+	 * @return a list in chronological order.
+	 */
+	public static List<Meeting> bubbleSortByDate(List<Meeting> list) {
+		int listSize = list.size();
+		for (int i = 0; i < (listSize - 1); i++) {
+			for (int j = 1; j < (listSize - i); j++) {
+				Meeting left = list.remove(j-1);
+				Calendar leftDate = left.getDate();
+				Meeting right = list.remove(j);
+				Calendar rightDate = right.getDate();
+				if (leftDate.compareTo(rightDate) > 0) { //If the left value is greater than the right, the element are swapped.
+					list.add((j-1), right);
+					list.add(j, left);
+				}
+			}
+		}
+		return list;
 	}
 }
