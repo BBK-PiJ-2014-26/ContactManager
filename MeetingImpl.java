@@ -40,15 +40,16 @@ import java.util.Set;
 	}
 
 	/**
-	 * Constructor method to be used when converting FutureMeeting into a PastMeeting.
+	 * Constructor method to be used when converting a Meeting into a PastMeeting.
+	 * Should only be used when the existing meeting has been removed.
 	 *
 	 * @param futureMeeting, the FutureMeeting to be converted to a PastMeeting.
 	 * @param notes are the notes to be recorded from the meeting.
 	 */
-	public MeetingImpl(FutureMeeting futureMeeting, String notes) {
-		this.contacts = futureMeeting.getContacts();
-		this.date = futureMeeting.getDate();
-		this.id = futureMeeting.getId();
+	public MeetingImpl(Meeting meeting, String notes) {
+		this.contacts = meeting.getContacts();
+		this.date = meeting.getDate();
+		this.id = meeting.getId();
 	}
 
 	public int getId() {

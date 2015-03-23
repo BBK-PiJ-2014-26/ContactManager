@@ -24,13 +24,14 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	/**
 	 * Constructor method to create a PastMeetingImpl object.
 	 *
-	 * Uses an existing Future Meeting whose id is kept the same.
+	 * Uses an existing Meeting whose id is kept the same.
+	 * Should only be used after the existing object has been deleted.
 	 *
-	 * @param futureMeeting, the FutureMeeting to be converted to a PastMeeting.
+	 * @param meeting, the Meeting to be converted into a PastMeeting.
 	 * @param notes are the notes to be recorded from the meeting.
 	 */
-	public PastMeetingImpl(FutureMeeting futureMeeting, String notes) {
-		super(futureMeeting, notes);
+	public PastMeetingImpl(Meeting meeting, String notes) {
+		super(meeting, notes);
 		this.notes = notes;
 	}
 
