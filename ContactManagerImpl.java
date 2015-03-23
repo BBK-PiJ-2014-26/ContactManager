@@ -239,7 +239,7 @@ public class ContactManagerImpl  {
 		return result;
 	}
 
-	public List<PastMeeting> getPastMeetingList(Contact contact) {
+	public List<PastMeeting> getPastMeetingList(Contact contact) throws IllegalArgumentException {
 		if (!contacts.contains(contact)) { //Checks whether the contact is a member of the set contacts.
 			throw new IllegalArgumentException();
 		} else {
@@ -259,4 +259,20 @@ public class ContactManagerImpl  {
 		}
 	}
 
+	public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) throws IllegalArgumentException, NullPointerException {
+		if (contacts.isEmpty()) {
+			//Tests whether  contacts is empty. If true, an exception is thrown.
+			throw new IllegalArgumentException();
+		} else if (!this.contacts.containsAll(contacts)) {
+			//Test whether contacts is a subset of the instance variable contacts.
+			//If false, an exception is thrown.
+			throw new IllegalArgumentException();
+		} else if (contacts.equals(null) || date.equals(null) || text.equals(null)) {
+			//Test if any of the arguments are null.
+			//If true, an exception is thrown.
+			throw new NullPointerException();
+		} else {
+			pastMeetings.add(new PastMeetingImpl(contacts, date, text));
+		}
+	}
 }
