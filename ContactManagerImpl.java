@@ -306,5 +306,16 @@ public class ContactManagerImpl  {
 		}
 	}
 
-
+	public void addNewContact(String name, String notes) throws NullPointerException {
+		if (name.equals(null) || notes.equals(null)) {
+			//Checks if either argument is null
+			//If true, an excepion is thrown
+			throw new NullPointerException();
+		} else {
+			//Creates a new Contact object and adds it to the Set contacts
+			Contact temp = new ContactImpl(name);
+			temp.addNotes(notes);
+			contacts.add(temp);
+		}
+	}
 }
