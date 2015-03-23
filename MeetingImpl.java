@@ -39,6 +39,18 @@ import java.util.Set;
 		this.id = nextId();
 	}
 
+	/**
+	 * Constructor method to be used when converting FutureMeeting into a PastMeeting.
+	 *
+	 * @param futureMeeting, the FutureMeeting to be converted to a PastMeeting.
+	 * @param notes are the notes to be recorded from the meeting.
+	 */
+	public MeetingImpl(FutureMeeting futureMeeting, String notes) {
+		this.contacts = futureMeeting.getContacts();
+		this.date = futureMeeting.getDate();
+		this.id = futureMeeting.getId();
+	}
+
 	public int getId() {
 		return id;
 	}
