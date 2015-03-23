@@ -289,8 +289,22 @@ public class ContactManagerImpl  {
 			//Tests whether id is on the pastMeetings list.
 			//If true, notes are added to that PastMeeting's notes field.
 			//If PastMeeting already has notes, those notes are overwritten.
-			PastMeetingImpl temp = getPastMeeting(id);
-			temp.
+			PastMeeting temp = getPastMeeting(id);
+			pastMeetings.remove(id);
+			pastMeetings.add(new PastMeetingImpl(temp, text)); //Adds amended PastMeeting back to list
+		} else if (containsFutureMeetingId(id)) {
+			FutureMeeting temp = getFutureMeeting(id);
+			Calendar tempDate = temp.getDate();
+			if (tempDate.compareTo(new GregorianCalendar()) >= 0) {
+				//Compare the FutureMeeting's date to the current date.
+				//If the meeting is in the future, an exception is thrown.
+				throw new IllegalStateException();
+			} else {
+				futureMeetings.remove(id);
+				pastMeetings.add(new PastMeetingImpl(temp, text));
+			}
+		}
+	}
 
 
 }
