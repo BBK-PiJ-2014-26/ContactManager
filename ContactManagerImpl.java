@@ -167,7 +167,7 @@ public class ContactManagerImpl  {
 				}
 			}
 			if (!result.isEmpty()) { //Tests to see if the list is empty. If false, the list is ordered by date.
-				result = ContactManagerImpl.bubbleSortByDate(result);
+				result = ContactManagerImpl.bubbleSortMeetingByDate(result);
 			}
 			return result;
 		}
@@ -176,17 +176,43 @@ public class ContactManagerImpl  {
 	/**
 	 * Takes a List of Meetings and orders the elements by date.
 	 * Uses bubble sort.
+	 * Not compatible with PastMeeting.
 	 *
 	 * @param list the list to be ordered.
 	 * @return a list in chronological order.
 	 */
-	public static List<Meeting> bubbleSortByDate(List<Meeting> list) {
+	public static List<Meeting> bubbleSortMeetingByDate(List<Meeting> list) {
 		int listSize = list.size();
 		for (int i = 0; i < (listSize - 1); i++) {
 			for (int j = 1; j < (listSize - i); j++) {
 				Meeting left = list.remove(j-1);
 				Calendar leftDate = left.getDate();
 				Meeting right = list.remove(j);
+				Calendar rightDate = right.getDate();
+				if (leftDate.compareTo(rightDate) > 0) { //If the left value is greater than the right, the element are swapped.
+					list.add((j-1), right);
+					list.add(j, left);
+				}
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Takes a List of PastMeetings and orders the elements by date.
+	 * Uses bubble sort.
+	 * Not compatible with FutureMeeting.
+	 *
+	 * @param list the list to be ordered.
+	 * @return a list in chronological order.
+	 */
+	public static List<PastMeeting> bubbleSortPastMeetingByDate(List<PastMeeting> list) {
+		int listSize = list.size();
+		for (int i = 0; i < (listSize - 1); i++) {
+			for (int j = 1; j < (listSize - i); j++) {
+				PastMeeting left = list.remove(j-1);
+				Calendar leftDate = left.getDate();
+				PastMeeting right = list.remove(j);
 				Calendar rightDate = right.getDate();
 				if (leftDate.compareTo(rightDate) > 0) { //If the left value is greater than the right, the element are swapped.
 					list.add((j-1), right);
@@ -208,8 +234,29 @@ public class ContactManagerImpl  {
 			}
 		}
 		if (!result.isEmpty()) { //Tests to see if the list is empty. If false, the list is ordered by date.
-			result = ContactManagerImpl.bubbleSortByDate(result);
+			result = ContactManagerImpl.bubbleSortMeetingByDate(result);
 		}
 		return result;
 	}
+
+	public List<PastMeeting> getPastMeetingList(Contact contact) {
+		if (!contacts.contains(contact)) { //Checks whether the contact is a member of the set contacts.
+			throw new IllegalArgumentException();
+		} else {
+			List<PastMeeting> result = new ArrayList<PastMeeting>();
+			Iterator<PastMeetingImpl> listIterator = pastMeetings.iterator();
+			while (listIterator.hasNext()) {
+				PastMeetingImpl tempMeeting = listIterator.next();
+				Set<Contact> tempSet = tempMeeting.getContacts();
+				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
+					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to the list.
+				}
+			}
+			if (!result.isEmpty()) { //Tests to see if the list is empty. If false, the list is ordered by date.
+				result = ContactManagerImpl.bubbleSortPastMeetingByDate(result);
+			}
+			return result;
+		}
+	}
+
 }
