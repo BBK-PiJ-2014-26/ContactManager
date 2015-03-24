@@ -29,7 +29,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	List<PastMeetingImpl> pastMeetings;
 
-	int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
+	public int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
 			throw new IllegalArgumentException();
 		} else if (!this.contacts.containsAll(contacts) || contacts.isEmpty()) {
@@ -326,15 +326,15 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param id the id to be checked against the set of contacts.
 	 * @return true if there is a matching id in contacts.
 	 */
-	public boolean  containsContact(int id) {
+	public boolean containsContact(int id) {
 		boolean result = false;
-		Iterator contactIterator = contacts.iterator();
+		Iterator<Contact> contactIterator = contacts.iterator();
 		boolean finished = false;
 		while (!finished) {
 			if (contactIterator.hasNext()) {
 				//Tests whether there are remaining contacts to iterate.
-				Contact temp = iterator.next();
-				if (temp.getID() == id) {
+				Contact temp = contactIterator.next();
+				if (temp.getId() == id) {
 					//Tests if the current iteration has a matching id.
 					finished = true;
 					result = true;
@@ -354,12 +354,12 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	public boolean  containsContact(String name) {
 		boolean result = false;
-		Iterator contactIterator = contacts.iterator();
+		Iterator<Contact> contactIterator = contacts.iterator();
 		boolean finished = false;
 		while (!finished) {
 			if (contactIterator.hasNext()) {
 				//Tests whether there are remaining contacts to iterate.
-				Contact temp = iterator.next();
+				Contact temp = contactIterator.next();
 				if (temp.getName() == name) {
 					//Tests if the current iteration has a matching id.
 					finished = true;
@@ -376,21 +376,21 @@ public class ContactManagerImpl implements ContactManager {
 		Set<Contact> result = new HashSet<Contact>();
 		for (int i = 0; i < ids.length; i++) {
 			//Iterates throug the array of ids passed as an argument.
-			if (!containsContact(ids[i]) {
+			if (!containsContact(ids[i])) {
 				//Checks if the id exists on set of contacts.
 				//If the id does not exist, an exception is thrown.
 				throw new IllegalArgumentException();
 			} else {
-				Iterator contactIterator = contacts.iterator();
+				Iterator<Contact> contactIterator = contacts.iterator();
 				boolean finished = false;
 				while (!finished) {
 					if (contactIterator.hasNext()) {
 						//Tests whether there are remaining contacts to iterate.
-						Contact temp = iterator.next();
-						if (temp.getID() == ids[i]) {
+						Contact temp = contactIterator.next();
+						if (temp.getId() == ids[i]) {
 							//Tests if the current iteration has a matching id.
 							finished = true;
-							result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes());
+							result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes()));
 						}
 					} else {
 						finished = true;
@@ -408,18 +408,18 @@ public class ContactManagerImpl implements ContactManager {
 			//If the id does not exist, an exception is thrown.
 			throw new NullPointerException();
 		} else {
-			Iterator contactIterator = contacts.iterator();
+			Iterator<Contact> contactIterator = contacts.iterator();
 			while (contactIterator.hasNext()) {
 				//Tests whether there are remaining contacts to iterate.
-				Contact temp = iterator.next();
+				Contact temp = contactIterator.next();
 				if (name.equals(temp.getName())) {
 					//Tests if the current iteration has a matching name.
-					result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes());
+					result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes()));
 				}
 			}
 		}
 		return result;
 	}
 
-	public void flush(); {}
+	public void flush() {	}
 }
