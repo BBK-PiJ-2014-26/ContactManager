@@ -2,6 +2,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
@@ -318,4 +319,89 @@ public class ContactManagerImpl  {
 			contacts.add(temp);
 		}
 	}
+
+	/**
+	 * Checks if the instance variable contacts contains a Contact with a matching id.
+	 *
+	 * @param id the id to be checked against the set of contacts.
+	 * @return true if there is a matching id in contacts.
+	 */
+	public boolean  containsContact(int id) {
+		boolean result = false;
+		Iterator contactIterator = contacts.iterator();
+		boolean finished = false;
+		while (!finished) {
+			if (contactIterator.hasNext()) {
+				//Tests whether there are remaining contacts to iterate.
+				Contact temp = iterator.next();
+				if (temp.getID() == id) {
+					//Tests if the current iteration has a matching id.
+					finished = true;
+					result = true;
+				}
+			} else {
+				finished = true;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Checks if the instance variable contacts contains a Contact with a matching name.
+	 *
+	 * @param name, the name to be checked against the set of contacts.
+	 * @return true if there is a matching name in contacts.
+	 */
+	public boolean  containsContact(String name) {
+		boolean result = false;
+		Iterator contactIterator = contacts.iterator();
+		boolean finished = false;
+		while (!finished) {
+			if (contactIterator.hasNext()) {
+				//Tests whether there are remaining contacts to iterate.
+				Contact temp = iterator.next();
+				if (temp.getName() == name) {
+					//Tests if the current iteration has a matching id.
+					finished = true;
+					result = true;
+				}
+			} else {
+				finished = true;
+			}
+		}
+		return result;
+	}
+
+	public Set<Contact> getContacts(int... ids) throws IllegalArgumentException {
+		Set<Contact> result = new HashSet<Contact>();
+		for (int i = 0; i < ids.length; i++) {
+			//Iterates throug the array of ids passed as an argument.
+			if (!containsContact(ids[i]) {
+				//Checks if the id exists on set of contacts.
+				//If the id does not exist, an exception is thrown.
+				throw new IllegalArgumentException();
+			} else {
+				Iterator contactIterator = contacts.iterator();
+				boolean finished = false;
+				while (!finished) {
+					if (contactIterator.hasNext()) {
+						//Tests whether there are remaining contacts to iterate.
+						Contact temp = iterator.next();
+						if (temp.getID() == ids[i]) {
+							//Tests if the current iteration has a matching id.
+							finished = true;
+							result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes());
+						}
+					} else {
+						finished = true;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public
+
+
 }
