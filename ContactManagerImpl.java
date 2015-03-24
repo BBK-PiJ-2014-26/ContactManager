@@ -11,7 +11,7 @@ import java.util.Iterator;
  *
  * @author Gareth Moore
  */
-public class ContactManagerImpl  {
+public class ContactManagerImpl implements ContactManager {
 	/**
 	 * A data structure to store contacts.
 	 */
@@ -401,7 +401,25 @@ public class ContactManagerImpl  {
 		return result;
 	}
 
-	public
+	public Set<Contact> getContacts(String name) throws NullPointerException {
+		Set<Contact> result = new HashSet<Contact>();
+		if (name.equals(null)) {
+			//Checks if the name exists on set of contacts.
+			//If the id does not exist, an exception is thrown.
+			throw new NullPointerException();
+		} else {
+			Iterator contactIterator = contacts.iterator();
+			while (contactIterator.hasNext()) {
+				//Tests whether there are remaining contacts to iterate.
+				Contact temp = iterator.next();
+				if (name.equals(temp.getName())) {
+					//Tests if the current iteration has a matching name.
+					result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes());
+				}
+			}
+		}
+		return result;
+	}
 
-
+	public void flush(); {}
 }
