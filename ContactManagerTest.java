@@ -20,7 +20,7 @@ public class ContactManagerTest {
 	Contact wonderWoman; //A contact for testing. Should have no future meetings or past meetings.
 
 	/**
-	 * Instantiates objects to be used in testing.
+	 * Sets up objects to be used in testing.
 	 */
 	@Before
 	public void buildUp() {
@@ -53,7 +53,7 @@ public class ContactManagerTest {
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
 				//Meeting id = 4
 		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
-				//Meeting ID = 5
+				//Meeting id = 5
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar());
 				//Meeting id = 6
 				//Meeting to occur at current system time. Allows this meeting to be used to test addMeetingNotes().
