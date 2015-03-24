@@ -745,22 +745,42 @@ public class ContactManagerTest {
 	}
 
 	/**
-	 * Tests containsContact()
+	 * Tests containsContact(int id)
 	 *
 	 * Should return false when checking id 100 which is an invalid Contact id.
 	 */
 	@Test
 	public void shouldReturnFasleIfInvalidId() {
-		assertFalse(myContactManager.containsFutureMeetingId(100));
+		assertFalse(myContactManager.containsContact(100));
 	}
 
 	/**
-	 * Tests containsContact()
+	 * Tests containsContact(int id)
 	 *
 	 * Should return true when checking meeting id 1.
 	 */
 	@Test
-	public void shouldReturnTrueIfContactExists() {
-		assertTrue(myContactManager.containsFutureMeetingId(1));
+	public void shouldReturnTrueIfContactIdExists() {
+		assertTrue(myContactManager.containsContact(1));
+	}
+
+	/**
+	 * Tests containsContact(String name)
+	 *
+	 * Should return false when checking name "J'onn J'onnz" which is an invalid Contact id.
+	 */
+	@Test
+	public void shouldReturnFasleIfInvalidName() {
+		assertFalse(myContactManager.containsContact("J'onn J'onnz"));
+	}
+
+	/**
+	 * Tests containsContact(String name)
+	 *
+	 * Should return true when checking meeting name is "Bruce Wayne".
+	 */
+	@Test
+	public void shouldReturnTrueIfContactNameExists() {
+		assertTrue(myContactManager.containsContact("Bruce Wayne"));
 	}
 }
