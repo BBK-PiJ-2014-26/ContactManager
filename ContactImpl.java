@@ -41,6 +41,18 @@ public class ContactImpl implements Contact {
 		this.id = nextId();
 	}
 
+	/**
+	 * Constructor method using all non-static fields as an argument.
+	 *
+	 * id may not be unique in this context because nextId() is not used.
+	 * Only to be used when calling getContacts() in ContactManager.
+	 */
+	public ContactImpl(int id, String name, String notes) {
+		this.id == id;
+		this.name = name;
+		this.notes = notes;
+	}
+
 	public int getId() {
 		return id;
 	}
