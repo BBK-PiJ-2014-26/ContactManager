@@ -12,7 +12,7 @@ import org.junit.After;
  * @author Gareth Moore.
  */
 public class ContactManagerTest {
-	ContactManagerImpl myContactManager; //A ContactManager object to be used in testing.
+	ContactManager myContactManager; //A ContactManager object to be used in testing.
 	Set<Contact> batmanSuperman; // A set of contacts to be used in testing. To be used to create one FutureMeeting and one PastMeeting;
 	Set<Contact> lanternSuperman; //A set of contacts for testing. Will have multiple past and future meetings.
 	Contact batman; //A contact for testing. Will have one future and one past meeting.
@@ -245,7 +245,7 @@ public class ContactManagerTest {
 	 * Should return an empty list because wonderWoman has no future meetings.
 	 */
 	@Test
-	public void shouldReturnEmptyList() {
+	public void shouldReturnEmptyListUsingGetFutureMeeting() {
 		try {
 			List<Meeting> emptyList = myContactManager.getFutureMeetingList(wonderWoman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
@@ -292,7 +292,7 @@ public class ContactManagerTest {
 	 * Should return an empty list because wonderWoman has no future meetings.
 	 */
 	@Test
-	public void shouldReturnEmptyList() {
+	public void shouldReturnEmptyListUsingGetPastMeeting() {
 		try {
 			List<Meeting> emptyList = myContactManager.getPastMeetingList(wonderWoman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
@@ -393,7 +393,7 @@ public class ContactManagerTest {
 	 * Should throw exception if a null Calendar is entered.
 	 */
 	@Test
-	public void shouldThrowExceptionWhenNullNotes() {
+	public void shouldThrowExceptionWhenNullCalendar() {
 		boolean exceptionThrown = false;
 		Calendar date = null;
 		try {
@@ -445,7 +445,7 @@ public class ContactManagerTest {
 	 * Verifies a new PastMeeting has been entered by checking its text field.
 	 */
 	@Test
-	public void shouldThrowExceptionWhenNullSet() {
+	public void shouldVerifyPastMeetingIsAddedCorrectly() {
 		try {
 			myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 1, 10, 30), "Brightest Day");
 				//Should be meeting id = 8.
@@ -498,7 +498,7 @@ public class ContactManagerTest {
 	 * Should throw exception if notes is null.
 	 */
 	@Test
-	public void shouldThrowExceptionWhenMeetingIdIsNull() {
+	public void shouldThrowExceptionWhenNotesAreNull() {
 		boolean exceptionThrown = false;
 		String notes = null;
 		try {
@@ -529,7 +529,6 @@ public class ContactManagerTest {
 		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
 		assertTrue(exceptionThrown);
 	}
-}
 
 	/**
 	 * Tests addMeetingNotes()
@@ -555,7 +554,7 @@ public class ContactManagerTest {
 	 * Should throw exception if name is null.
 	 */
 	@Test
-	public void shouldThrowExceptionIfNameIsNull() {
+	public void shouldThrowExceptionIfContactNameIsNull() {
 		boolean exceptionThrown = false;
 		String name = null;
 		try {
@@ -660,7 +659,7 @@ public class ContactManagerTest {
 		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
 		Contact testContact = testSet.get(0);
 				//The returned set should only contain one element therefore it should exist at index 0
-		assertEquals(1, testContact.getId())l
+		assertEquals(1, testContact.getId());
 	}
 
 	/**
@@ -716,11 +715,11 @@ public class ContactManagerTest {
 
 	/**
 	 * Tests containsFutureMeetingId()
-	 *
+	 *
 	 * Should return false when checking id 3 which is a PastMeeting.
 	 */
 	@Test
-	public void shouldReturnFasleIfIdIsFutureMeeting() {
+	public void shouldReturnFasleIfIdIsPastMeeting() {
 		assertFalse(myContactManager.containsFutureMeetingId(3));
 	}
 
@@ -764,23 +763,5 @@ public class ContactManagerTest {
 		assertTrue(myContactManager.containsContact(1));
 	}
 
-	/**
-	 * Tests containsContact(String name)
-	 *
-	 * Should return false when checking name "J'onn J'onnz" which is an invalid Contact id.
-	 */
-	@Test
-	public void shouldReturnFasleIfInvalidName() {
-		assertFalse(myContactManager.containsContact("J'onn J'onnz"));
-	}
 
-	/**
-	 * Tests containsContact(String name)
-	 *
-	 * Should return true when checking meeting name is "Bruce Wayne".
-	 */
-	@Test
-	public void shouldReturnTrueIfContactNameExists() {
-		assertTrue(myContactManager.containsContact("Bruce Wayne"));
-	}
 }
