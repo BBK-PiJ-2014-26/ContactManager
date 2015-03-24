@@ -346,32 +346,6 @@ public class ContactManagerImpl implements ContactManager {
 		return result;
 	}
 
-	/**
-	 * Checks if the instance variable contacts contains a Contact with a matching name.
-	 *
-	 * @param name, the name to be checked against the set of contacts.
-	 * @return true if there is a matching name in contacts.
-	 */
-	public boolean  containsContact(String name) {
-		boolean result = false;
-		Iterator<Contact> contactIterator = contacts.iterator();
-		boolean finished = false;
-		while (!finished) {
-			if (contactIterator.hasNext()) {
-				//Tests whether there are remaining contacts to iterate.
-				Contact temp = contactIterator.next();
-				if (temp.getName() == name) {
-					//Tests if the current iteration has a matching id.
-					finished = true;
-					result = true;
-				}
-			} else {
-				finished = true;
-			}
-		}
-		return result;
-	}
-
 	public Set<Contact> getContacts(int... ids) throws IllegalArgumentException {
 		Set<Contact> result = new HashSet<Contact>();
 		for (int i = 0; i < ids.length; i++) {
