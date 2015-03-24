@@ -691,7 +691,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnFasleIfIdIsFutureMeeting() {
-		assertFalse(myContactManager.containsPastMeetingId(7);
+		assertFalse(myContactManager.containsPastMeetingId(7));
 	}
 
 	/**
@@ -701,7 +701,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnTrueIfPastMeetingExists() {
-		assertTrue(myContactManager.containsPastMeetingId(3);
+		assertTrue(myContactManager.containsPastMeetingId(3));
 	}
 
 	/**
@@ -711,7 +711,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnFasleIfPastMeetingDoesNotExist() {
-		assertFalse(myContactManager.containsPastMeetingId(7);
+		assertFalse(myContactManager.containsPastMeetingId(7));
 	}
 
 	/**
@@ -721,7 +721,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnFasleIfIdIsFutureMeeting() {
-		assertFalse(myContactManager.containsFutureMeetingId(3);
+		assertFalse(myContactManager.containsFutureMeetingId(3));
 	}
 
 	/**
@@ -731,7 +731,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnTrueIfFutureMeetingExists() {
-		assertTrue(myContactManager.containsFutureMeetingId(7);
+		assertTrue(myContactManager.containsFutureMeetingId(7));
 	}
 
 	/**
@@ -741,7 +741,26 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnFalseIfFutureMeetingDoesNotExist() {
-		assertFalse(myContactManager.containsFutureMeetingId(100);
+		assertFalse(myContactManager.containsFutureMeetingId(100));
 	}
 
+	/**
+	 * Tests containsContact()
+	 *
+	 * Should return false when checking id 100 which is an invalid Contact id.
+	 */
+	@Test
+	public void shouldReturnFasleIfInvalidId() {
+		assertFalse(myContactManager.containsFutureMeetingId(100));
+	}
+
+	/**
+	 * Tests containsContact()
+	 *
+	 * Should return true when checking meeting id 1.
+	 */
+	@Test
+	public void shouldReturnTrueIfContactExists() {
+		assertTrue(myContactManager.containsFutureMeetingId(1));
+	}
 }
