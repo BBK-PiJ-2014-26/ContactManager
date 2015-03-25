@@ -2,7 +2,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.Set;
+import java.util.List;
+import java.util.Iterator;
 import java.util.HashSet;
 import org.junit.After;
 
@@ -15,44 +18,36 @@ public class ContactManagerTest {
 	ContactManager myContactManager; //A ContactManager object to be used in testing.
 	Set<Contact> batmanSuperman; // A set of contacts to be used in testing. To be used to create one FutureMeeting and one PastMeeting;
 	Set<Contact> lanternSuperman; //A set of contacts for testing. Will have multiple past and future meetings.
-	Contact batman; //A contact for testing. Will have one future and one past meeting.
-	Contact greenLantern, superman; // Contacts for testing. These contacts should have multiple future and past meetings.
-	Contact wonderWoman; //A contact for testing. Should have no future meetings or past meetings.
 
 	/**
 	 * Sets up objects to be used in testing.
 	 */
 	@Before
 	public void buildUp() {
-		batman = new ContactImpl("Bruce Wayne");
-				//Contact id = 1
-		superman = new ContactImpl("Clark Kent");
-				//Contact id = 2
-		wonderWoman = new ContactImpl("Diana Prince");
-				//Contact id = 3
-		greenLantern = new ContactImpl("Hal Jordan");
-				//Contact id = 4
-		batmanSuperman = new HashSet<Contact>();
-		batmanSuperman.add(batman);
-		batmanSuperman.add(superman);
-		lanternSuperman = new HashSet<Contact>();
-		lanternSuperman.add(superman);
-		lanternSuperman.add(greenLantern);
 		myContactManager = new ContactManagerImpl();
-		myContactManager.contacts = new HashSet<Contact>();
-		myContactManager.contacts.add(batman);
-		myContactManager.contacts.add(superman);
-		myContactManger.contacts.add(wonderWoman);
-		myContactManger.contacts.add(greenLantern);
+		myContactManager.addNewContact("Bruce Wayne", "The Dark Knight");
+				//Contact id = 1
+				//Will have one future and one past meeting.
+		myContactManager.addNewContact("Clark Kent", "The Man of Steel");
+				//Contact id = 2
+				// This contact should have multiple future and past meetings.
+		myContactManager.addNewContact("Diana Prince", "From Themscyria");
+				//Contact id = 3
+				//A contact for testing. Should have no future meetings or past meetings.
+		myContactManager.addNewContact("Hal Jordan", "By Green Lantern's light");
+				//Contact id = 4
+				// This contact should have multiple future and past meetings.
+		batmanSuperman = myContactManager.getContacts(1, 2);
+		lanternSuperman = myContactManager.getContacts(2, 4);
 		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
 				//Meeting id = 1
 		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
 				//Meeting id = 2
-		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "The Apokolips problem?");
+		myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "The Apokolips problem?");
 				//Meeting id = 3
-		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
+		myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2012, 10, 5, 12, 30), "Trouble on Oa?");
 				//Meeting id = 4
-		myContactManager.addPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
+		myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
 				//Meeting id = 5
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar());
 				//Meeting id = 6
@@ -182,7 +177,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnNullFutureMeeting() {
-		PastMeeting testMeeting = myContactManager.getFutureMeeting(10000);
+		FutureMeeting testMeeting = myContactManager.getFutureMeeting(10000);
 		assertNull(testMeeting);
 	}
 
@@ -222,7 +217,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnNullMeeting() {
-		PastMeeting testMeeting = myContactManager.getFutureMeeting(10000);
+		Meeting testMeeting = myContactManager.getMeeting(10000);
 		assertNull(testMeeting);
 	}
 
@@ -242,12 +237,18 @@ public class ContactManagerTest {
 	/**
 	 * Tests getFutureMeetingList(Contact).
 	 *
-	 * Should return an empty list because wonderWoman has no future meetings.
+	 * Should return an empty list because Wonder Woman has no future meetings.
 	 */
 	@Test
 	public void shouldReturnEmptyListUsingGetFutureMeeting() {
+		Set<Contact> testSet = myContactManager.getContacts("Diana Prince");
+		//Remove a set containing a single contact who has no future meetings.
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact wonderWoman = setIterator.next();
+		//The list has only one item so removing index 0 removes the correct Contact
+		List<Meeting> emptyList = null;
 		try {
-			List<Meeting> emptyList = myContactManager.getFutureMeetingList(wonderWoman);
+			emptyList = myContactManager.getFutureMeetingList(wonderWoman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
 		assertTrue(emptyList.isEmpty());
 	}
@@ -277,24 +278,36 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnMeetingId2() {
+		Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+		//Remove a set containing a single contact who has one future meetings.
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact batman = setIterator.next();
+		//The list has only one item so removing index 0 removes the correct Contact
+		List<Meeting> testList = null;
 		try {
-			List<Meeting> testList = myContactManager.getFutureMeetingList(batman);
+			testList = myContactManager.getFutureMeetingList(batman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
-		Meeting testMeeting = testList.get(0); //List should contain only one meeting, therefore the single meeting should be at index 0.
-		int expectedMeetingId = 2;
+		Meeting testMeeting = testList.get(0);
+		//List should contain only one meeting, therefore the single meeting should be at index 0.
 		int actualMeetingId = testMeeting.getId();
-		assertEquals(expectedMeetingId, actualMeetingId);
+		assertEquals(2, actualMeetingId);
 	}
 
 	/**
 	 * Tests getPastMeetingList(Contact).
 	 *
-	 * Should return an empty list because wonderWoman has no future meetings.
+	 * Should return an empty list because wonderWoman has no past meetings.
 	 */
 	@Test
 	public void shouldReturnEmptyListUsingGetPastMeeting() {
+		Set<Contact> testSet = myContactManager.getContacts("Diana Prince");
+		//Remove a set containing a single contact who has no past meetings.
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact wonderWoman = setIterator.next();
+		//The list has only one item so removing index 0 removes the correct Contact
+		List<PastMeeting> emptyList = null;
 		try {
-			List<Meeting> emptyList = myContactManager.getPastMeetingList(wonderWoman);
+			emptyList = myContactManager.getPastMeetingList(wonderWoman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
 		assertTrue(emptyList.isEmpty());
 	}
@@ -324,13 +337,19 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnMeetingId1() {
+		Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+		//Remove a set containing a single contact who has one past meeting.
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact batman = setIterator.next();
+		//The list has only one item so removing index 0 removes the correct Contact
+		List<PastMeeting> testList = null;
 		try {
-			List<Meeting> testList = myContactManager.getPastMeetingList(batman);
+			testList = myContactManager.getPastMeetingList(batman);
 		} catch (IllegalArgumentException ex) {} //No action required to deal with caught exception.
-		Meeting testMeeting = testList.get(0); //List should contain only one meeting, therefore the single meeting should be at index 0.
-		int expectedMeetingId = 1;
+		Meeting testMeeting = testList.get(0);
+		//List should contain only one meeting, therefore the single meeting should be at index 0.
 		int actualMeetingId = testMeeting.getId();
-		assertEquals(expectedMeetingId, actualMeetingId);
+		assertEquals(1, actualMeetingId);
 	}
 
 	/**
@@ -341,17 +360,6 @@ public class ContactManagerTest {
 	@Test
 	public void shouldReturnEmptyFutureListUsingCalendar() {
 		List<Meeting> emptyList = myContactManager.getFutureMeetingList(new GregorianCalendar(2017, 12, 25));
-		assertTrue(emptyList.isEmpty());
-	}
-
-	/**
-	 * Tests getPastMeetingList(Calendar).
-	 *
-	 * Should return an empty list because there are no meeting on Christmas Day 2010.
-	 */
-	@Test
-	public void shouldReturnEmptyPastListUsingCalendar() {
-		List<Meeting> emptyList = myContactManager.getPastMeetingList(new GregorianCalendar(2010, 12, 25));
 		assertTrue(emptyList.isEmpty());
 	}
 
@@ -465,30 +473,12 @@ public class ContactManagerTest {
 	public void shouldThrowExceptionWhenMeetingIdDoesNotExist() {
 		boolean exceptionThrown = false;
 		try {
-			addMeetingNotes(10000, "Rogue's Gallery"); //10000 is an invalid meeting id.
+			myContactManager.addMeetingNotes(10000, "Rogue's Gallery"); //10000 is an invalid meeting id.
 		} catch (IllegalStateException ex) {
 		} catch (NullPointerException ex) { //No action required if these exceptions are thrown.
 		} catch (IllegalArgumentException ex) {
 			exceptionThrown = true;
 		}
-		assertTrue(exceptionThrown);
-	}
-
-	/**
-	 * Tests addMeetingNotes()
-	 *
-	 * Should throw exception if meeting id is null.
-	 */
-	@Test
-	public void shouldThrowExceptionWhenMeetingIdIsNull() {
-		boolean exceptionThrown = false;
-		int id = null;
-		try {
-			addMeetingNotes(id, "Rogue's Gallery");
-		} catch (NullPointerException ex) {
-			exceptionThrown = true;
-		} catch (IllegalStateException ex) {
-		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
 		assertTrue(exceptionThrown);
 	}
 
@@ -502,7 +492,7 @@ public class ContactManagerTest {
 		boolean exceptionThrown = false;
 		String notes = null;
 		try {
-			addMeetingNotes(6, notes);
+			myContactManager.addMeetingNotes(6, notes);
 				//Meeting id 6 is sceduled for the current system time.
 				//So it should be in the past by the time of this method call.
 		} catch (NullPointerException ex) {
@@ -521,7 +511,7 @@ public class ContactManagerTest {
 	public void shouldThrowExceptionWhenMeetingIsFutureMeeting() {
 		boolean exceptionThrown = false;
 		try {
-			addMeetingNotes(7, "Rogue's Gallery");
+			myContactManager.addMeetingNotes(7, "Rogue's Gallery");
 				//Meeting id 7 is scheduled for the future.
 		} catch (IllegalStateException ex) {
 			exceptionThrown = true;
@@ -538,7 +528,7 @@ public class ContactManagerTest {
 	@Test
 	public void shouldAddNotesSuccessfully() {
 		try {
-			addMeetingNotes(6, "Rogue's Gallery");
+			myContactManager.addMeetingNotes(6, "Rogue's Gallery");
 				//Meeting id 6 is sceduled for the current system time.
 				//So it should be in the past by the time of this method call.
 		} catch (IllegalStateException ex) {
@@ -593,8 +583,11 @@ public class ContactManagerTest {
 			myContactManager.addNewContact("Carter Hall", "Welcome to Thanagar");
 					//Contact id will equal 5
 		} catch (NullPointerException ex) {} //No action required if exception is caught
-		Set<Contact> testSet = myContactManager.getContacts(5); //Gets a set containg newly added Contact
-		Contact testContact = testSet.get(0); //There is only one member of the set so the contact must lie at index 0.
+		Set<Contact> testSet = myContactManager.getContacts(5);
+		//Creates a set containg newly added Contact
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact testContact = setIterator.next();
+		//There is only one member of the set.
 		assertEquals("Carter Hall", testContact.getName());
 	}
 
@@ -622,8 +615,9 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnCorrectSetOfContacts() {
+		Set<Contact> testSet = null;
 		try {
-			Set<Contact> testSet = myContactManager.getContacts(1, 2);
+			testSet = myContactManager.getContacts(1, 2);
 		} catch (IllegalArgumentException ex) {} //No action required to handle a thrown exception
 		assertTrue(testSet.containsAll(batmanSuperman));
 				//The existing set batmanSuperman should contain exactly the same elements.
@@ -653,12 +647,14 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnCorrectSetOfContactsUsingName() {
+		Set<Contact> testSet = null;
 		try {
-			Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+			testSet = myContactManager.getContacts("Bruce Wayne");
 				//Bruce Wayne refers to Contact batman whose id is 1
 		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
-		Contact testContact = testSet.get(0);
-				//The returned set should only contain one element therefore it should exist at index 0
+		Iterator<Contact> setIterator = testSet.iterator();
+		Contact testContact = setIterator.next();
+				//The returned set should only contain one element
 		assertEquals(1, testContact.getId());
 	}
 
@@ -672,96 +668,15 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnASetOf2Contacts() {
-		myContactManager.Contacts.add(new ContactImpl("Bruce Wayne"));
+		myContactManager.addNewContact("Bruce Wayne", "Caped Crusader");
 				//Adds new contact with the name Bruce Wayne
+		Set<Contact> testSet = null;
 		try {
-			Set<Contact> testSet = myContactManager.getContacts("Bruce Wayne");
+			testSet = myContactManager.getContacts("Bruce Wayne");
 				//Removes all the Contacts with the name Bruce Wayne
 		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
-		Contact testContact = testSet.get(0);
-		assertEquals(2, testContact.size());
+		assertEquals(2, testSet.size());
 				//Verifies that the returned set contains two Contacts
 	}
-
-	/**
-	 * Tests containsPastMeetingId()
-	 *
-	 * Should return false when checking id 7 which is a FutureMeeting.
-	 */
-	@Test
-	public void shouldReturnFasleIfIdIsFutureMeeting() {
-		assertFalse(myContactManager.containsPastMeetingId(7));
-	}
-
-	/**
-	 * Tests containsPastMeetingId()
-	 *
-	 * Should return true when checking meeting id 3.
-	 */
-	@Test
-	public void shouldReturnTrueIfPastMeetingExists() {
-		assertTrue(myContactManager.containsPastMeetingId(3));
-	}
-
-	/**
-	 * Tests containsPastMeetingId()
-	 *
-	 * Should return false when checking id 100 does not exist.
-	 */
-	@Test
-	public void shouldReturnFasleIfPastMeetingDoesNotExist() {
-		assertFalse(myContactManager.containsPastMeetingId(7));
-	}
-
-	/**
-	 * Tests containsFutureMeetingId()
-	 *
-	 * Should return false when checking id 3 which is a PastMeeting.
-	 */
-	@Test
-	public void shouldReturnFasleIfIdIsPastMeeting() {
-		assertFalse(myContactManager.containsFutureMeetingId(3));
-	}
-
-	/**
-	 * Tests containsFutureMeetingId()
-	 *
-	 * Should return true when checking meeting id 7.
-	 */
-	@Test
-	public void shouldReturnTrueIfFutureMeetingExists() {
-		assertTrue(myContactManager.containsFutureMeetingId(7));
-	}
-
-	/**
-	 * Tests containsFutureMeetingId()
-	 *
-	 * Should return false when checking id 100 which does not exist.
-	 */
-	@Test
-	public void shouldReturnFalseIfFutureMeetingDoesNotExist() {
-		assertFalse(myContactManager.containsFutureMeetingId(100));
-	}
-
-	/**
-	 * Tests containsContact(int id)
-	 *
-	 * Should return false when checking id 100 which is an invalid Contact id.
-	 */
-	@Test
-	public void shouldReturnFasleIfInvalidId() {
-		assertFalse(myContactManager.containsContact(100));
-	}
-
-	/**
-	 * Tests containsContact(int id)
-	 *
-	 * Should return true when checking meeting id 1.
-	 */
-	@Test
-	public void shouldReturnTrueIfContactIdExists() {
-		assertTrue(myContactManager.containsContact(1));
-	}
-
 
 }
