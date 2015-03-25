@@ -32,7 +32,7 @@ public class ContactManagerImpl implements ContactManager {
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
 			throw new IllegalArgumentException();
-		} else if (!this.contacts.containsAll(contacts) || contacts.isEmpty()) {
+		} else if (!this.containsAll(contacts) || contacts.isEmpty()) {
 						//Validates the supplied sets of contacts.
 						//If a contact is not contained within the ContactManager, an exception is thrown.
 						//If the set empty, an exception is also thrown.
@@ -265,7 +265,7 @@ public class ContactManagerImpl implements ContactManager {
 		if (contacts.isEmpty()) {
 			//Tests whether  contacts is empty. If true, an exception is thrown.
 			throw new IllegalArgumentException();
-		} else if (!this.contacts.containsAll(contacts)) {
+		} else if (!this.containsAll(contacts)) {
 			//Test whether contacts is a subset of the instance variable contacts.
 			//If false, an exception is thrown.
 			throw new IllegalArgumentException();
@@ -410,23 +410,7 @@ public class ContactManagerImpl implements ContactManager {
 			boolean contactExists = false;
 			//For each iteration, the value is reset to false.
 			Contact argContact = argIterator.next();
-			Iterator<Contact> thisIterator = this.contacts.iterator();
-			//Creates an iterator for the instance variable.
-			while (thisIterator.hasNext()) {
-				Contact thisContact = thisIterator.next();
-				if (thisContact.getId() == argContact.getId()) {
-					//Tests if the id matches.
-					String thisName = thisContact.getName();
-					if (thisName.equals(argContact.getName())) {
-						//Tests if the name matches.
-						String thisNotes = thisContact.getNotes();
-						if (thisNotes.equals(argContact.getNotes())) {
-							//Tests if the notes field matches.
-							contactExists = true;
-						}
-					}
-				}
-			}
+			contactExists = contains(argContact);
 			if (!contactExists) {
 				//Tests if the current Contact exists.
 				//If it doesn't, the result is set to false.
@@ -434,6 +418,33 @@ public class ContactManagerImpl implements ContactManager {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Tests whether the Contact is contained within the Set of Contacts.
+	 *
+	 * @param contact is the Contact to be checked.
+	 * @return true if contact is contained within the list.
+	 */
+	public boolean contains(Contact contact) {
+		boolean result = false;
+		Iterator<Contact> thisIterator = this.contacts.iterator();
+		//Creates an iterator to iterate through the set of Contacts.
+		while (thisIterator.hasNext()) {
+			Contact thisContact = thisIterator.next();
+			if (thisContact.getId() == contact.getId()) {
+				//Tests if the id matches.
+				String thisName = thisContact.getName();
+				if (thisName.equals(contact.getName())) {
+					//Tests if the name matches.
+					String thisNotes = thisContact.getNotes();
+					if (thisNotes.equals(contact.getNotes())) {
+						//Tests if the notes field matches.
+						result = true;
+					}
+				}
+			}
+		}
 	}
 
 	public void flush() {	}
