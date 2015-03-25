@@ -21,13 +21,13 @@ public class ContactManagerImpl implements ContactManager {
 	 * Using FutureMeetinImpl instead of PastMeeting because
 	 * FutureMeeting does not contain instance variables.
 	 */
-	List<FutureMeetingImpl> futureMeetings = new ArrayList<FutureMeetingImpl>();
+	List<FutureMeeting> futureMeetings = new ArrayList<FutureMeeting>();
 	/**
 	 * A data structure to store past meetings.
 	 * Using PastMeetinImpl instead of PastMeeting because
 	 * PastMeeting does not contain instance variables.
 	 */
-	List<PastMeetingImpl> pastMeetings = new ArrayList<PastMeetingImpl>();
+	List<PastMeeting> pastMeetings = new ArrayList<PastMeeting>();
 
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
@@ -38,9 +38,10 @@ public class ContactManagerImpl implements ContactManager {
 						//If the set empty, an exception is also thrown.
 			throw new IllegalArgumentException();
 		} else {
-			//Meeting newMeeting = new FutureMeetingImpl(contacts, date);
-			//int result = futureMeetings.add(newMeeting);
-			return 1;
+			FutureMeeting newMeeting = new FutureMeetingImpl(contacts, date);
+			futureMeetings.add(newMeeting);
+			int result = newMeeting.getId();
+			return result;
 		}
 	}
 
@@ -52,12 +53,12 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	public boolean containsPastMeetingId(int id) {
 		boolean result = false;
-		Iterator<PastMeetingImpl> listIterator = pastMeetings.iterator();
+		Iterator<PastMeeting> listIterator = pastMeetings.iterator();
 			//Must be PastMeetingImpl because PastMeeting interface does not have an id variable.
 		boolean finished = false;
 		while (!finished) {
 			if (listIterator.hasNext()) { //Tests whether the end of the list has been reached.
-				PastMeetingImpl temp = listIterator.next();
+				PastMeeting temp = listIterator.next();
 				if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 					result = true;
 					finished = true;
@@ -77,12 +78,12 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	public boolean containsFutureMeetingId(int id) {
 		boolean result = false;
-		Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+		Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 			//Must be MeetingImpl because Meeting interface does not have an id variable.
 		boolean finished = false;
 		while (!finished) {
 			if (listIterator.hasNext()) { //Tests whether the end of the list has been reached.
-				FutureMeetingImpl temp = listIterator.next();
+				FutureMeeting temp = listIterator.next();
 				if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 					result = true;
 					finished = true;
@@ -100,11 +101,11 @@ public class ContactManagerImpl implements ContactManager {
 			//Checks if the requested meeting id is a FutureMeeting
 			throw new IllegalArgumentException();
 		} else {
-			Iterator<PastMeetingImpl> listIterator = pastMeetings.iterator();
+			Iterator<PastMeeting> listIterator = pastMeetings.iterator();
 			boolean finished = false;
 			while (!finished) {
 				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
-					PastMeetingImpl temp = listIterator.next();
+					PastMeeting temp = listIterator.next();
 					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
@@ -123,11 +124,11 @@ public class ContactManagerImpl implements ContactManager {
 			//Checks if the requested meeting id is a PastMeeting
 			throw new IllegalArgumentException();
 		} else {
-			Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+			Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 			boolean finished = false;
 			while (!finished) {
 				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
-					FutureMeetingImpl temp = listIterator.next();
+					FutureMeeting temp = listIterator.next();
 					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
@@ -159,9 +160,9 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException();
 		} else {
 			List<Meeting> result = new ArrayList<Meeting>();
-			Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+			Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 			while (listIterator.hasNext()) {
-				FutureMeetingImpl tempMeeting = listIterator.next();
+				FutureMeeting tempMeeting = listIterator.next();
 				Set<Contact> tempSet = tempMeeting.getContacts();
 				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
 					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to our list.
@@ -226,9 +227,9 @@ public class ContactManagerImpl implements ContactManager {
 
 	public List<Meeting> getFutureMeetingList(Calendar date) {
 		List<Meeting> result = new ArrayList<Meeting>();
-		Iterator<FutureMeetingImpl> listIterator = futureMeetings.iterator();
+		Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 		while (listIterator.hasNext()) {
-			FutureMeetingImpl tempMeeting = listIterator.next();
+			FutureMeeting tempMeeting = listIterator.next();
 			Calendar tempDate = tempMeeting.getDate();
 			if (tempDate.equals(date)) { //Tests if the parameter matches the date of this meeting
 				result.add(tempMeeting); //If dates match, the meeting is added to the list.
@@ -245,9 +246,9 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException();
 		} else {
 			List<PastMeeting> result = new ArrayList<PastMeeting>();
-			Iterator<PastMeetingImpl> listIterator = pastMeetings.iterator();
+			Iterator<PastMeeting> listIterator = pastMeetings.iterator();
 			while (listIterator.hasNext()) {
-				PastMeetingImpl tempMeeting = listIterator.next();
+				PastMeeting tempMeeting = listIterator.next();
 				Set<Contact> tempSet = tempMeeting.getContacts();
 				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
 					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to the list.
@@ -390,6 +391,46 @@ public class ContactManagerImpl implements ContactManager {
 					//Tests if the current iteration has a matching name.
 					result.add(new ContactImpl(temp.getId(), temp.getName(), temp.getNotes()));
 				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Verfiies if a Set of contacts is a subset of the instance variable contacts.
+	 *
+	 * @param contacts, the set of contacts to check against the instance variable contacts.
+	 * @return true if contacts is a subset.
+	 */
+	public boolean containsAll(Set<Contact> contacts) {
+		boolean result = true;
+		Iterator<Contact> argIterator = contacts.iterator();
+		//Creates an iterator for the Set passed as an argument.
+		while (argIterator.hasNext()) {
+			boolean contactExists = false;
+			//For each iteration, the value is reset to false.
+			Contact argContact = argIterator.next();
+			Iterator<Contact> thisIterator = this.contacts.iterator();
+			//Creates an iterator for the instance variable.
+			while (thisIterator.hasNext()) {
+				Contact thisContact = thisIterator.next();
+				if (thisContact.getId() == argContact.getId()) {
+					//Tests if the id matches.
+					String thisName = thisContact.getName();
+					if (thisName.equals(argContact.getName())) {
+						//Tests if the name matches.
+						String thisNotes = thisContact.getNotes();
+						if (thisNotes.equals(argContact.getNotes())) {
+							//Tests if the notes field matches.
+							contactExists = true;
+						}
+					}
+				}
+			}
+			if (!contactExists) {
+				//Tests if the current Contact exists.
+				//If it doesn't, the result is set to false.
+				result = false;
 			}
 		}
 		return result;
