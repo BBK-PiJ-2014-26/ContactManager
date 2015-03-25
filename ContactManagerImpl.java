@@ -15,19 +15,19 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * A data structure to store contacts.
 	 */
-	Set<Contact> contacts;
+	Set<Contact> contacts = new HashSet<Contact>();
 	/**
 	 * A data structure to store future meetings.
 	 * Using FutureMeetinImpl instead of PastMeeting because
 	 * FutureMeeting does not contain instance variables.
 	 */
-	List<FutureMeetingImpl> futureMeetings;
+	List<FutureMeetingImpl> futureMeetings = new ArrayList<FutureMeetingImpl>();
 	/**
 	 * A data structure to store past meetings.
 	 * Using PastMeetinImpl instead of PastMeeting because
 	 * PastMeeting does not contain instance variables.
 	 */
-	List<PastMeetingImpl> pastMeetings;
+	List<PastMeetingImpl> pastMeetings = new ArrayList<PastMeetingImpl>();
 
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
 		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
