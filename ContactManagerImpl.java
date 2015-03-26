@@ -156,15 +156,15 @@ public class ContactManagerImpl implements ContactManager {
 	}
 
 	public List<Meeting> getFutureMeetingList(Contact contact) throws IllegalArgumentException  {
-		if (!contacts.contains(contact)) { //Checks whether the contact is a member of the set contacts.
+		if (!contains(contact)) { //Checks whether the contact is a member of the set contacts.
 			throw new IllegalArgumentException();
 		} else {
 			List<Meeting> result = new ArrayList<Meeting>();
 			Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 			while (listIterator.hasNext()) {
-				FutureMeeting tempMeeting = listIterator.next();
+				Meeting tempMeeting = listIterator.next();
 				Set<Contact> tempSet = tempMeeting.getContacts();
-				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
+				if (contains(tempSet, contact)) { //Checks whether the contact is attending this meeting
 					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to our list.
 				}
 			}
@@ -242,7 +242,7 @@ public class ContactManagerImpl implements ContactManager {
 	}
 
 	public List<PastMeeting> getPastMeetingList(Contact contact) throws IllegalArgumentException {
-		if (!contacts.contains(contact)) { //Checks whether the contact is a member of the set contacts.
+		if (!contains(contact)) { //Checks whether the contact is a member of the set contacts.
 			throw new IllegalArgumentException();
 		} else {
 			List<PastMeeting> result = new ArrayList<PastMeeting>();
@@ -250,7 +250,7 @@ public class ContactManagerImpl implements ContactManager {
 			while (listIterator.hasNext()) {
 				PastMeeting tempMeeting = listIterator.next();
 				Set<Contact> tempSet = tempMeeting.getContacts();
-				if (tempSet.contains(contact)) { //Checks whether the contact is attending this meeting
+				if (contains(tempSet, contact)) { //Checks whether the contact is attending this meeting
 					result.add(tempMeeting); //If contact is attending the meeting, the meeting is added to the list.
 				}
 			}
@@ -297,12 +297,12 @@ public class ContactManagerImpl implements ContactManager {
 		} else if (containsFutureMeetingId(id)) {
 			FutureMeeting temp = getFutureMeeting(id);
 			Calendar tempDate = temp.getDate();
-			if (tempDate.compareTo(new GregorianCalendar()) >= 0) {
+			if (tempDate.compareTo(new GregorianCalendar()) > 0) {
 				//Compare the FutureMeeting's date to the current date.
 				//If the meeting is in the future, an exception is thrown.
 				throw new IllegalStateException();
 			} else {
-				futureMeetings.remove(id);
+				futureMeetings.remove(temp);
 				pastMeetings.add(new PastMeetingImpl(temp, text));
 			}
 		}
@@ -424,7 +424,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * Tests whether the Contact is contained within the Set of Contacts.
 	 *
 	 * @param contact is the Contact to be checked.
-	 * @return true if contact is contained within the list.
+	 * @return true if contact is contained within the set.
 	 */
 	public boolean contains(Contact contact) {
 		boolean result = false;
@@ -445,6 +445,36 @@ public class ContactManagerImpl implements ContactManager {
 				}
 			}
 		}
+		return result;
+	}
+
+	/**
+	 * Tests whether the Contact is contained within a Set of Contacts.
+	 *
+	 * @param contact is the Contact to be checked.
+	 * @param contactSet is the set of contacts to be searched.
+	 * @return true if contact is contained within the list.
+	 */
+	public boolean contains(Set<Contact> contactSet, Contact contact) {
+		boolean result = false;
+		Iterator<Contact> setIterator = contactSet.iterator();
+		//Creates an iterator to iterate through the set of Contacts.
+		while (setIterator.hasNext()) {
+			Contact tempContact = setIterator.next();
+			if (tempContact.getId() == contact.getId()) {
+				//Tests if the id matches.
+				String tempName = tempContact.getName();
+				if (tempName.equals(contact.getName())) {
+					//Tests if the name matches.
+					String tempNotes = tempContact.getNotes();
+					if (tempNotes.equals(contact.getNotes())) {
+						//Tests if the notes field matches.
+						result = true;
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	public void flush() {	}

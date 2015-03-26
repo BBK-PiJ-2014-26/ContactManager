@@ -49,9 +49,8 @@ public class ContactManagerTest {
 				//Meeting id = 4
 		myContactManager.addNewPastMeeting(lanternSuperman, new GregorianCalendar(2013, 10, 5, 12, 30), "What happenned to Mongul?");
 				//Meeting id = 5
-		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar());
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2018, 11, 26, 10, 30));
 				//Meeting id = 6
-				//Meeting to occur at current system time. Allows this meeting to be used to test addMeetingNotes().
 		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2017, 11, 26, 10, 5));
 				//Meeting id = 7
 	}
@@ -126,7 +125,7 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnCorrectMeetingID() {
-		int expectedId = 1;
+		int expectedId = 8;
 		int actualId = myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2020, 1, 1, 10, 15));
 		assertEquals(expectedId, actualId);
 	}
@@ -371,8 +370,9 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void shouldReturnBatmansFutureMeeting() {
-		List<Meeting> actualList = myContactManager.getFutureMeetingList(new GregorianCalendar(2015, 11, 26));
-		Meeting actualMeeting = actualList.get(0); //List should contain one meeting so the meeting I am checking should be at index 0.
+		List<Meeting> actualList = myContactManager.getFutureMeetingList(new GregorianCalendar(2015, 11, 26, 10, 5));
+		Meeting actualMeeting = actualList.get(0);
+		//List should contain one meeting so the meeting I am checking should be at index 0.
 		int actualId = actualMeeting.getId();
 		int expectedId = 2; //See Before, batman has only one future meeting which should have id 2.
 		assertEquals(expectedId, actualId);
@@ -524,17 +524,22 @@ public class ContactManagerTest {
 	 * Tests addMeetingNotes()
 	 *
 	 * Verfies that notes were added successfully.
+	 * Should convert a future meeting into a past meeting.
 	 */
 	@Test
 	public void shouldAddNotesSuccessfully() {
 		try {
-			myContactManager.addMeetingNotes(6, "Rogue's Gallery");
-				//Meeting id 6 is sceduled for the current system time.
+			myContactManager.addFutureMeeting(lanternSuperman, Calendar.getInstance());
+			//Add a new meeting id = 8
+			//Uses the current system date.
+			//addMeetingNotes() should convert a meeting carrying today's date into a PastMeeting.
+			myContactManager.addMeetingNotes(8, "Rogue's Gallery");
+				//Meeting id 6 is scheduled for the current system time.
 				//So it should be in the past by the time of this method call.
 		} catch (IllegalStateException ex) {
 		} catch (NullPointerException ex) {
 		} catch (IllegalArgumentException ex) {} //No action required if these exceptions are thrown.
-		PastMeeting testMeeting = myContactManager.getPastMeeting(6);
+		PastMeeting testMeeting = myContactManager.getPastMeeting(8);
 		assertEquals("Rogue's Gallery", testMeeting.getNotes());
 	}
 
@@ -611,7 +616,7 @@ public class ContactManagerTest {
 	/**
 	 * Tests getContacts(int...)
 	 *
-	 * Verifies the returned Set is correct by checking ids.
+	 * Verifies the returned Set is the same as batmanSuperman.
 	 */
 	@Test
 	public void shouldReturnCorrectSetOfContacts() {
@@ -619,7 +624,18 @@ public class ContactManagerTest {
 		try {
 			testSet = myContactManager.getContacts(1, 2);
 		} catch (IllegalArgumentException ex) {} //No action required to handle a thrown exception
-		assertTrue(testSet.containsAll(batmanSuperman));
+		Iterator<Contact> testIterator = testSet.iterator();
+		boolean batmanExists =  false;
+		boolean supermanExists = false;
+		while (testIterator.hasNext()) {
+			Contact testContact = testIterator.next();
+			if (testContact.getName().equals("Bruce Wayne")) {
+				batmanExists = true;
+			} else if (testContact.getName().equals("Clark Kent")) {
+				supermanExists = true;
+			}
+		}
+		assertTrue(batmanExists && supermanExists);
 				//The existing set batmanSuperman should contain exactly the same elements.
 	}
 
