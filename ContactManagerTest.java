@@ -706,7 +706,7 @@ public class ContactManagerTest {
 	@Test
 	public void shouldCreateFile() {
 		myContactManager.flush();
-		File contacts = new File("contacts.txt");
+		File contacts = new File("./contacts.txt");
 		assertTrue(contacts.exists());
 	}
 
@@ -720,6 +720,15 @@ public class ContactManagerTest {
 	 */
 	@Test
 	public void fileShouldContain12Lines() {
+		myContactManager.flush();
+		BufferedReader myReader = new BufferedReader(new FileReader("./contacts.text"));
+		String line = myReader.readLine();
+		int counter = 1;
+		while (line!= null) {
+			line = myReader.readLine();
+			counter++;
+		}
+		assertEquals(12, counter);
 	}
 
 }
