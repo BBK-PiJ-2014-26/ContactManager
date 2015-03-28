@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.HashSet;
 import org.junit.After;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
 
 /**
  * Tests the class ContactManagerImpl.
@@ -693,6 +696,30 @@ public class ContactManagerTest {
 		} catch (NullPointerException ex) {} //No action required to handle a thrown exception
 		assertEquals(2, testSet.size());
 				//Verifies that the returned set contains two Contacts
+	}
+
+	/**
+	 * Tests flush().
+	 *
+	 * Confirm that flush() create a file called "contacts.txt"
+	 */
+	@Test
+	public void shouldCreateFile() {
+		myContactManager.flush();
+		File contacts = new File("contacts.txt");
+		assertTrue(contacts.exists());
+	}
+
+	/**
+	 * Tests flush().
+	 *
+	 * Verfies that data is written to "contacts.txt".
+	 * The tests read each line sequentially.
+	 * It increments a counter for each line of date.
+	 * The file should 12 lines: 2 for iDcounters, 4 for contacts and 6 for meetings.
+	 */
+	@Test
+	public void fileShouldContain12Lines() {
 	}
 
 }
