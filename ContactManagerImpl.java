@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.io.FileWriter;
+import java.io.File;
 
 /**
  * Implements the interface ContactManager.
@@ -477,5 +479,45 @@ public class ContactManagerImpl implements ContactManager {
 		return result;
 	}
 
-	public void flush() {	}
+	public void flush() {
+		//Writes a ".csv" file.
+		File contactsFile = new File("./contacts.txt");
+		contactsFile.createNewFile();
+		try {
+			FileWriter contactsWriter = new FileWriter(contactsFile);
+			//Writes the cuurent value of the class ContactImpls's iDCounter.
+			//Allows this static value to be easily recovered when the application is restarted.
+			contactsWriter.write(ContactImpl.iDCounter + "/n");
+			//Writes the cuurent value of the class MeetingImpl's iDCounter.
+			//Allows this static value to be easily recovered when the application is restarted.
+			contactsWriter.write(MeetingImpl.iDCounter + "/n")
+			//Iterates each element in the set of contacts.
+			//For each elemet, the id, name, and notes are written.
+			Iterator contactsIterator = contacts.iterator();
+			while (contactsIterator.hasNext()) {
+				Contact temp = contactsIterator.next();
+				contactsFile.write(temp.getId() + ", " + temp.getName() + ", " + temp.getNotes() + "/n");
+			}
+			//Iterates each element in the list pastMeetings.
+			//For each elemet, the id, name, and notes are written.
+			Iterator pastMeetingIterator = pastMeetings.iterator();
+			while (pastMeetingIterator.hasNext()) {
+				PastMeeting temp = pastMeetingIterator.next();
+				contactsFile.write(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString() + ", " + temp.getNotes());
+			}
+			//Iterates each element in the list futureMeetings.
+			//For each elemet, the id, name, and notes are written.
+			Iterator pastMeetingIterator = pastMeetings.iterator();
+			while (futureMeetingIterator.hasNext()) {
+				FutureMeeting temp = futureMeetingIterator.next();
+				contactsFile.write(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString());
+			}
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			contactsWriter.close();
+		}
+	}
 }
