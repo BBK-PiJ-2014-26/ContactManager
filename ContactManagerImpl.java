@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -483,48 +483,44 @@ public class ContactManagerImpl implements ContactManager {
 
 	public void flush() {
 		//Writes a ".csv" file.
-		FileWriter contactsWriter = null;
+		PrintWriter contactsWriter = null;
 		try {
 			File contactsFile = new File("./contacts.txt");
 			contactsFile.createNewFile();
-			contactsWriter = new FileWriter(contactsFile);
+			contactsWriter = new PrintWriter(contactsFile);
 			//Writes the cuurent value of the class ContactImpls's iDCounter.
 			//Allows this static value to be easily recovered when the application is restarted.
-			contactsWriter.write(ContactImpl.iDCounter + "/n");
+			contactsWriter.println(ContactImpl.iDCounter);
 			//Writes the cuurent value of the class MeetingImpl's iDCounter.
 			//Allows this static value to be easily recovered when the application is restarted.
-			contactsWriter.write(MeetingImpl.iDCounter + "/n");
+			contactsWriter.println(MeetingImpl.iDCounter);
 			//Iterates each element in the set of contacts.
 			//For each elemet, the id, name, and notes are written.
 			Iterator<Contact> contactsIterator = contacts.iterator();
 			while (contactsIterator.hasNext()) {
 				Contact temp = contactsIterator.next();
-				contactsWriter.write(temp.getId() + ", " + temp.getName() + ", " + temp.getNotes() + "/n");
+				contactsWriter.println(temp.getId() + ", " + temp.getName() + ", " + temp.getNotes());
 			}
 			//Iterates each element in the list pastMeetings.
 			//For each elemet, the id, name, and notes are written.
 			Iterator<PastMeeting> pastMeetingIterator = pastMeetings.iterator();
 			while (pastMeetingIterator.hasNext()) {
 				PastMeeting temp = pastMeetingIterator.next();
-				contactsWriter.write(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString() + ", " + temp.getNotes() + "/n");
+				contactsWriter.println(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString() + ", " + temp.getNotes());
 			}
 			//Iterates each element in the list futureMeetings.
 			//For each elemet, the id, name, and notes are written.
 			Iterator<FutureMeeting> futureMeetingIterator = futureMeetings.iterator();
 			while (futureMeetingIterator.hasNext()) {
 				FutureMeeting temp = futureMeetingIterator.next();
-				contactsWriter.write(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString() + "/n");
+				contactsWriter.println(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString());
 			}
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
-			try {
-				contactsWriter.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			contactsWriter.close();
 		}
 	}
 }

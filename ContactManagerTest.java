@@ -11,6 +11,7 @@ import org.junit.After;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Tests the class ContactManagerImpl.
@@ -716,19 +717,27 @@ public class ContactManagerTest {
 	 * Verfies that data is written to "contacts.txt".
 	 * The tests read each line sequentially.
 	 * It increments a counter for each line of date.
-	 * The file should 12 lines: 2 for iDcounters, 4 for contacts and 6 for meetings.
+	 * The file should 13 lines: 2 for iDcounters, 4 for contacts and 7 for meetings.
 	 */
 	@Test
-	public void fileShouldContain12Lines() {
-		myContactManager.flush();
-		BufferedReader myReader = new BufferedReader(new FileReader("./contacts.text"));
-		String line = myReader.readLine();
-		int counter = 1;
-		while (line!= null) {
-			line = myReader.readLine();
-			counter++;
+	public void fileShouldContain13Lines() {
+		int counter = 0;
+		BufferedReader myReader = null;
+		try {
+			myContactManager.flush();
+			myReader = new BufferedReader(new FileReader(new File("./contacts.txt")));
+			String line = myReader.readLine();
+			while (line != null) {
+				counter++;
+				line = myReader.readLine();
+			}
+		} catch (IOException ex) { //No action required for caught exception.
+		} finally {
+			try {
+				myReader.close();
+			} catch (IOException ex) {} //No action required for caught exception.
 		}
-		assertEquals(12, counter);
+		assertEquals(13, counter);
 	}
 
 }
