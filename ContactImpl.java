@@ -6,7 +6,7 @@
 public class ContactImpl implements Contact {
 	/**
 	 * A unique id for every Contact object.
-	 * Cannot be negative number or zero.
+	 * Cannot be a negative number or zero.
 	 */
 	private int id;
 	/**
@@ -23,7 +23,7 @@ public class ContactImpl implements Contact {
 	 * A static counter which tracks the most recently used id.
 	 * Each time a constructor is called, a nextId() call increments the counter.
 	 * When the ContactManager application is restarted,
-	 * the value is reassigned using the most recently used id.
+	 * the value is reassigned.
 	 */
 	public static int iDCounter = 0;
 
@@ -62,7 +62,7 @@ public class ContactImpl implements Contact {
 	}
 
 	public String getNotes() {
-		String result = ""; // If the notes field is null, then the mthod should reurn an empty string.
+		String result = ""; // If the notes field is null, then the mthod should return an empty string.
 		if(notes != null) {
 			result = notes; // If the notes field has a value, then the empty string is replaced by the field's contents.
 		}
@@ -76,7 +76,7 @@ public class ContactImpl implements Contact {
 	/**
 	 * Increments the iDCounter by 1.
 	 */
-	public int nextId() {
+	private int nextId() {
 		iDCounter++;
 		return iDCounter;
 	}

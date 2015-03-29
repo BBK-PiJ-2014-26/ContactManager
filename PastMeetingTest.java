@@ -90,17 +90,4 @@ public class PastMeetingTest {
 		Set<Contact> actualSet = myPastMeeting.getContacts();
 		assertEquals(expectedSet, actualSet);
 	}
-
-	/**
-	 * Tests addNotes().
-	 *
-	 * Should add notes correctly.
-	 */
-	@Test
-	public void shouldAddMeetingNotes() {
-		PastMeetingImpl temp = new PastMeetingImpl(tempContactSet, new GregorianCalendar(2015, 10, 10, 10, 0), "Scarecrow has escaped");
-			//Need to use PastMeetingImpl because addNotes is not on the PastMeeting interface.
-		temp.addNotes("Scarecrow has been recaptured");
-		assertEquals("Scarecrow has been recaptured", temp.getNotes());
-	}
 }

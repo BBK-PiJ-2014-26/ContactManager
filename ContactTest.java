@@ -9,7 +9,6 @@ import org.junit.After;
  * @author Gareth Moore.
  */
 public class ContactTest {
-
 	Contact myContact; // A contact object to be used in testing.
 
 	/**
@@ -22,7 +21,7 @@ public class ContactTest {
 
 	/**
 	 * iDCounter is a static variable so may interfere with test results.
-	 * To avoid this problem, iDCounter is rest to 0 after each test.
+	 * To avoid this problem, iDCounter is reset to 0 after each test.
 	 */
 	@After
 	public void cleanUp() {
@@ -43,7 +42,7 @@ public class ContactTest {
 	/**
 	 * Tests nextId(). nextId() is enacted on each call of the Constructor.
 	 *
-	 * After 100 000 Contact objects are created, the 100 000th object should have Id 100 000.
+	 * After 100 000 Contact objects are created, the 100 000th object should have id 100 000.
 	 */
 	@Test
 	public void shouldReturnId100000() {
@@ -51,9 +50,7 @@ public class ContactTest {
 		for (int i = 1; i <= 99999; i++) { //Creates 99999 contact objects. 1 object was created before test.
 			testContact = new ContactImpl("Mirror Master");
 		}
-		int expectedId = 100000;
-		int actualId = testContact.getId();
-		assertEquals(expectedId, actualId);
+		assertEquals(100000, testContact.getId());
 	}
 
 	/**
@@ -62,9 +59,7 @@ public class ContactTest {
 	 */
 	@Test
 	public void shouldReturnCorrectName() {
-		String expectedName = "Bruce Wayne";
-		String actualName = myContact.getName();
-		assertEquals(expectedName, actualName);
+		assertEquals("Bruce Wayne", myContact.getName());
 	}
 
 	/**
