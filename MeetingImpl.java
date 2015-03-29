@@ -1,4 +1,3 @@
-import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.util.Set;
 
@@ -9,7 +8,7 @@ import java.util.Set;
  */
  public class MeetingImpl implements Meeting{
 	/**
-	 * A unique for each Meeting object.
+	 * A unique id for each Meeting object.
 	 */
 	private int id;
 	/**
@@ -28,10 +27,10 @@ import java.util.Set;
 	public static int iDCounter = 0;
 
 	/**
-	 * Constructor method/
+	 * Constructor method.
 	 *
 	 * @param contacts, the set of contacts who will attend the meeting.
-	 * @param date, the date and time of the scheduled meeting.
+	 * @param date, the date of the scheduled meeting.
 	 */
 	public MeetingImpl(Set<Contact> contacts, Calendar date) {
 		this.contacts = contacts;
@@ -40,13 +39,13 @@ import java.util.Set;
 	}
 
 	/**
-	 * Constructor method to be used when converting a Meeting into a PastMeeting.
-	 * Should only be used when the existing meeting has been removed.
+	 * Constructor method to be used when converting a FutureMeeting into a PastMeeting.
+	 * Should only be used when the existing FutureMeeting has been removed.
 	 *
-	 * @param futureMeeting, the FutureMeeting to be converted to a PastMeeting.
+	 * @param meeting, the FutureMeeting to be converted to a PastMeeting.
 	 * @param notes are the notes to be recorded from the meeting.
 	 */
-	public MeetingImpl(Meeting meeting, String notes) {
+	public MeetingImpl(Meeting meeting) {
 		this.contacts = meeting.getContacts();
 		this.date = meeting.getDate();
 		this.id = meeting.getId();
@@ -67,7 +66,7 @@ import java.util.Set;
 	/**
 	 * Increments the iDCounter.
 	 */
-	public int nextId() {
+	private int nextId() {
 		iDCounter++;
 		return iDCounter;
 	}
