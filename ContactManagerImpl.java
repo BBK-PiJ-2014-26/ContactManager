@@ -503,17 +503,19 @@ public class ContactManagerImpl implements ContactManager {
 			}
 			//Iterates each element in the list pastMeetings.
 			//For each elemet, the id, name, and notes are written.
+			//Dates are written using toString() because I do not know what variable the user requires, TimeZone, Calendar system etc...
 			Iterator<PastMeeting> pastMeetingIterator = pastMeetings.iterator();
 			while (pastMeetingIterator.hasNext()) {
 				PastMeeting temp = pastMeetingIterator.next();
-				contactsWriter.println(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString() + ", " + temp.getNotes());
+				contactsWriter.println(temp.getId() + ", " + getContactIds(temp.getContacts()) + ", " + temp.getDate().toString() + ", " + temp.getNotes());
 			}
 			//Iterates each element in the list futureMeetings.
 			//For each elemet, the id, name, and notes are written.
+			//Dates are written using toString() because I do not know what variable the user requires, TimeZone, Calendar system etc...
 			Iterator<FutureMeeting> futureMeetingIterator = futureMeetings.iterator();
 			while (futureMeetingIterator.hasNext()) {
 				FutureMeeting temp = futureMeetingIterator.next();
-				contactsWriter.println(temp.getId() + ", " + temp.getContacts().toString() + ", " + temp.getDate().toString());
+				contactsWriter.println(temp.getId() + ", " + getContactIds(temp.getContacts()) + ", " + temp.getDate().toString());
 			}
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
@@ -522,5 +524,30 @@ public class ContactManagerImpl implements ContactManager {
 		} finally {
 			contactsWriter.close();
 		}
+	}
+
+	/**
+	 * Takes a Set of Contacts as an argument
+	 * then returns a String containing that Set's Contact ids.
+	 * Ids are enclosed within square brackets.
+	 * Ids are delimited by a single space character.
+	 *
+	 * @param contacts is the Set to bbe used as the basic of the string.
+	 * @return the String containg the set's ids.
+	 */
+	private String getContactIds(Set<Contact> contacts) {
+		String result = "[";
+		Iterator<Contact> contactIterator = contacts.iterator();
+		while (contactIterator.hasNext()) {
+			Contact temp = contactIterator.next();
+			result = result + temp.getId();
+			if (contactIterator.hasNext()) {
+				//Tests if there are any characters left to iterate.
+				//If true a space character is concatenated to the result.
+				result = result + " ";
+			}
+		}
+		result = result + "]";
+		return result;
 	}
 }
