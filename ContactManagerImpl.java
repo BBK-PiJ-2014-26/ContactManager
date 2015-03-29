@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.io.PrintWriter;
 import java.io.File;
@@ -34,12 +33,12 @@ public class ContactManagerImpl implements ContactManager {
 	List<PastMeeting> pastMeetings = new ArrayList<PastMeeting>();
 
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) throws IllegalArgumentException {
-		if (date.compareTo(new GregorianCalendar()) < 0) { //Compares the provided date to the current date and time.
+		if (date.compareTo(Calendar.getInstance()) < 0) { //Compares the provided date to the current date and time.
 			throw new IllegalArgumentException();
 		} else if (!this.containsAll(contacts) || contacts.isEmpty()) {
-						//Validates the supplied sets of contacts.
-						//If a contact is not contained within the ContactManager, an exception is thrown.
-						//If the set empty, an exception is also thrown.
+			//Validates the supplied sets of contacts.
+			//If a contact is not contained within the ContactManager, an exception is thrown.
+			//If the set empty, an exception is also thrown.
 			throw new IllegalArgumentException();
 		} else {
 			FutureMeeting newMeeting = new FutureMeetingImpl(contacts, date);
@@ -55,10 +54,9 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param id, id to be verfied.
 	 * @return true if the meeting is contained within the list.
 	 */
-	public boolean containsPastMeetingId(int id) {
+	private boolean containsPastMeetingId(int id) {
 		boolean result = false;
 		Iterator<PastMeeting> listIterator = pastMeetings.iterator();
-			//Must be PastMeetingImpl because PastMeeting interface does not have an id variable.
 		boolean finished = false;
 		while (!finished) {
 			if (listIterator.hasNext()) { //Tests whether the end of the list has been reached.
@@ -80,15 +78,16 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param id, id to be verfied.
 	 * @return true if the meeting is contained within the list.
 	 */
-	public boolean containsFutureMeetingId(int id) {
+	private boolean containsFutureMeetingId(int id) {
 		boolean result = false;
 		Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
-			//Must be MeetingImpl because Meeting interface does not have an id variable.
 		boolean finished = false;
 		while (!finished) {
-			if (listIterator.hasNext()) { //Tests whether the end of the list has been reached.
+			if (listIterator.hasNext()) {
+				//Tests whether the end of the list has been reached.
 				FutureMeeting temp = listIterator.next();
-				if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
+				if (temp.getId() == id) {
+					//Tests whether the current iteration's id matches parameter.
 					result = true;
 					finished = true;
 				}
@@ -108,9 +107,11 @@ public class ContactManagerImpl implements ContactManager {
 			Iterator<PastMeeting> listIterator = pastMeetings.iterator();
 			boolean finished = false;
 			while (!finished) {
-				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
+				if(listIterator.hasNext()) {
+					//Tests whether the end of the list has been reached.
 					PastMeeting temp = listIterator.next();
-					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
+					if (temp.getId() == id) {
+						//Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
 					}
@@ -131,9 +132,11 @@ public class ContactManagerImpl implements ContactManager {
 			Iterator<FutureMeeting> listIterator = futureMeetings.iterator();
 			boolean finished = false;
 			while (!finished) {
-				if(listIterator.hasNext()) { //Tests whether the end of the list has been reached.
+				if(listIterator.hasNext()) {
+					//Tests whether the end of the list has been reached.
 					FutureMeeting temp = listIterator.next();
-					if (temp.getId() == id) { //Tests whether the current iteration's id matches parameter.
+					if (temp.getId() == id) {
+						//Tests whether the current iteration's id matches parameter.
 						result = temp;
 						finished = true;
 					}
@@ -187,46 +190,54 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param list the list to be ordered.
 	 * @return a list in chronological order.
 	 */
-	public static List<Meeting> bubbleSortMeetingByDate(List<Meeting> list) {
-		int listSize = list.size();
-		for (int i = 0; i < (listSize - 1); i++) {
+	private static List<Meeting> bubbleSortMeetingByDate(List<Meeting> list) {
+		List<Meeting> result = list;
+		int listSize = result.size();
+		for (int i = 0; i < listSize; i++) {
 			for (int j = 1; j < (listSize - i); j++) {
-				Meeting left = list.remove(j-1);
+				Meeting left = result.get(j-1);
 				Calendar leftDate = left.getDate();
-				Meeting right = list.remove(j);
+				Meeting right = result.get(j);
 				Calendar rightDate = right.getDate();
-				if (leftDate.compareTo(rightDate) > 0) { //If the left value is greater than the right, the element are swapped.
-					list.add((j-1), right);
-					list.add(j, left);
+				if (leftDate.after(rightDate)) {
+					//If the left date is greater than the right, the elements are swapped.
+					right = result.remove(j);
+					left = result.remove(j-1);
+					result.add((j-1), right);
+					result.add(j, left);
 				}
 			}
 		}
-		return list;
+		return result;
 	}
 
 	/**
 	 * Takes a List of PastMeetings and orders the elements by date.
 	 * Uses bubble sort.
-	 * Not compatible with FutureMeeting.
+	 * Not compatible with FutureMeeting or Meeting.
 	 *
 	 * @param list the list to be ordered.
 	 * @return a list in chronological order.
 	 */
-	public static List<PastMeeting> bubbleSortPastMeetingByDate(List<PastMeeting> list) {
-		int listSize = list.size();
-		for (int i = 0; i < (listSize - 1); i++) {
+	private static List<PastMeeting> bubbleSortPastMeetingByDate(List<PastMeeting> list) {
+		List<PastMeeting> result = list;
+		int listSize = result.size();
+		for (int i = 0; i < (listSize); i++) {
 			for (int j = 1; j < (listSize - i); j++) {
-				PastMeeting left = list.remove(j-1);
+				PastMeeting left = result.get(j-1);
 				Calendar leftDate = left.getDate();
-				PastMeeting right = list.remove(j);
+				PastMeeting right = result.get(j);
 				Calendar rightDate = right.getDate();
-				if (leftDate.compareTo(rightDate) > 0) { //If the left value is greater than the right, the element are swapped.
+				if (leftDate.after(rightDate)) {
+					//If the left value is greater than the right, the element are swapped.
+					right = result.remove(j);
+					left = result.remove(j-1);
 					list.add((j-1), right);
 					list.add(j, left);
 				}
 			}
 		}
-		return list;
+		return result;
 	}
 
 	public List<Meeting> getFutureMeetingList(Calendar date) {
@@ -301,7 +312,7 @@ public class ContactManagerImpl implements ContactManager {
 		} else if (containsFutureMeetingId(id)) {
 			FutureMeeting temp = getFutureMeeting(id);
 			Calendar tempDate = temp.getDate();
-			if (tempDate.compareTo(new GregorianCalendar()) > 0) {
+			if (tempDate.compareTo(Calendar.getInstance()) > 0) {
 				//Compare the FutureMeeting's date to the current date.
 				//If the meeting is in the future, an exception is thrown.
 				throw new IllegalStateException();
@@ -331,7 +342,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param id the id to be checked against the set of contacts.
 	 * @return true if there is a matching id in contacts.
 	 */
-	public boolean containsContact(int id) {
+	private boolean containsContact(int id) {
 		boolean result = false;
 		Iterator<Contact> contactIterator = contacts.iterator();
 		boolean finished = false;
@@ -406,7 +417,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param contacts, the set of contacts to check against the instance variable contacts.
 	 * @return true if contacts is a subset.
 	 */
-	public boolean containsAll(Set<Contact> contacts) {
+	private boolean containsAll(Set<Contact> contacts) {
 		boolean result = true;
 		Iterator<Contact> argIterator = contacts.iterator();
 		//Creates an iterator for the Set passed as an argument.
@@ -430,7 +441,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param contact is the Contact to be checked.
 	 * @return true if contact is contained within the set.
 	 */
-	public boolean contains(Contact contact) {
+	private boolean contains(Contact contact) {
 		boolean result = false;
 		Iterator<Contact> thisIterator = this.contacts.iterator();
 		//Creates an iterator to iterate through the set of Contacts.
@@ -459,7 +470,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * @param contactSet is the set of contacts to be searched.
 	 * @return true if contact is contained within the list.
 	 */
-	public boolean contains(Set<Contact> contactSet, Contact contact) {
+	private boolean contains(Set<Contact> contactSet, Contact contact) {
 		boolean result = false;
 		Iterator<Contact> setIterator = contactSet.iterator();
 		//Creates an iterator to iterate through the set of Contacts.
@@ -497,6 +508,8 @@ public class ContactManagerImpl implements ContactManager {
 			//Iterates each element in the set of contacts.
 			//For each elemet, the id, name, and notes are written.
 			Iterator<Contact> contactsIterator = contacts.iterator();
+			//Writes "CONTACTS" so contact record can be easily identified.
+			contactsWriter.println("CONTACTS");
 			while (contactsIterator.hasNext()) {
 				Contact temp = contactsIterator.next();
 				contactsWriter.println(temp.getId() + ", " + temp.getName() + ", " + temp.getNotes());
@@ -505,6 +518,8 @@ public class ContactManagerImpl implements ContactManager {
 			//For each elemet, the id, name, and notes are written.
 			//Dates are written using toString() because I do not know what variable the user requires, TimeZone, Calendar system etc...
 			Iterator<PastMeeting> pastMeetingIterator = pastMeetings.iterator();
+			//Writes "PAST MEETINGS" so contact record can be easily identified.
+			contactsWriter.println("PAST MEETINGS");
 			while (pastMeetingIterator.hasNext()) {
 				PastMeeting temp = pastMeetingIterator.next();
 				contactsWriter.println(temp.getId() + ", " + getContactIds(temp.getContacts()) + ", " + temp.getDate().toString() + ", " + temp.getNotes());
@@ -513,6 +528,8 @@ public class ContactManagerImpl implements ContactManager {
 			//For each elemet, the id, name, and notes are written.
 			//Dates are written using toString() because I do not know what variable the user requires, TimeZone, Calendar system etc...
 			Iterator<FutureMeeting> futureMeetingIterator = futureMeetings.iterator();
+			//Writes "FUTURE MEETINGS" so contact record can be easily identified.
+			contactsWriter.println("FUTURE MEETINGS");
 			while (futureMeetingIterator.hasNext()) {
 				FutureMeeting temp = futureMeetingIterator.next();
 				contactsWriter.println(temp.getId() + ", " + getContactIds(temp.getContacts()) + ", " + temp.getDate().toString());

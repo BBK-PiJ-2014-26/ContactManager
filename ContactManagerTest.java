@@ -717,10 +717,10 @@ public class ContactManagerTest {
 	 * Verfies that data is written to "contacts.txt".
 	 * The tests read each line sequentially.
 	 * It increments a counter for each line of date.
-	 * The file should 13 lines: 2 for iDcounters, 4 for contacts and 7 for meetings.
+	 * The file should 16 lines: 3 for titles (eg. "CONTACTS"), 2 for iDcounters, 4 for contacts and 7 for meetings.
 	 */
 	@Test
-	public void fileShouldContain13Lines() {
+	public void fileShouldContain16Lines() {
 		int counter = 0;
 		BufferedReader myReader = null;
 		try {
@@ -737,7 +737,74 @@ public class ContactManagerTest {
 				myReader.close();
 			} catch (IOException ex) {} //No action required for caught exception.
 		}
-		assertEquals(13, counter);
+		assertEquals(16, counter);
 	}
 
+	/**
+	 * Tests getFutureMeetingList(Contact).
+	 *
+	 * Should return a list in chronological order.
+	 */
+	@Test
+	public void shouldReturnChronologicalFutureMeetingListUsingContact() {
+		Set<Contact> tempSet = myContactManager.getContacts(2);
+		//Return a set of contacts containing a single contact superman.
+		Iterator<Contact> setIterator = tempSet.iterator();
+		//The set contains only one element so the first and only Contact is superman.
+		Contact superman = setIterator.next();
+		List<Meeting> testList = myContactManager.getFutureMeetingList(superman);
+		boolean inOrder = true;
+		Calendar left = null;
+		Meeting temp = null;
+		if (!testList.isEmpty()) {
+			temp = testList.get(0);
+			left = temp.getDate();
+		}
+		int size = testList.size();
+		for (int i = 1; i < size; i++) {
+			temp = testList.get(i);
+			Calendar right = temp.getDate();
+			if (left.after(right)) {
+				//Tests whether left meeting is scheduled after right meeting.
+				//If true, then the list is no in chronological order.
+				inOrder = false;
+			}
+			left = right;
+		}
+		assertTrue(inOrder);
+	}
+
+	/**
+	 * Tests getPastMeetingList(Contact).
+	 *
+	 * Should return a list in chronological order.
+	 */
+	@Test
+	public void shouldReturnChronologicalPastMeetingListUsingContact() {
+		Set<Contact> tempSet = myContactManager.getContacts(2);
+		//Return a set of contacts containing a single contact superman.
+		Iterator<Contact> setIterator = tempSet.iterator();
+		//The set contains only one element so the first and only Contact is superman.
+		Contact superman = setIterator.next();
+		List<PastMeeting> testList = myContactManager.getPastMeetingList(superman);
+		boolean inOrder = true;
+		Calendar left = null;
+		PastMeeting temp = null;
+		if (!testList.isEmpty()) {
+			temp = testList.get(0);
+			left = temp.getDate();
+		}
+		int size = testList.size();
+		for (int i = 1; i < size; i++) {
+			temp = testList.get(i);
+			Calendar right = temp.getDate();
+			if (left.after(right)) {
+				//Tests whether left meeting is scheduled after right meeting.
+				//If true, then the list is no in chronological order.
+				inOrder = false;
+			}
+			left = right;
+		}
+		assertTrue(inOrder);
+	}
 }
