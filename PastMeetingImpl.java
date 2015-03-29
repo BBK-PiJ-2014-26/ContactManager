@@ -40,15 +40,4 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	public String getNotes() {
 		return notes;
 	}
-
-	/**
-	 * Adder for notes.
-	 *
-	 * To be used when adding notes to an existing PastMeeting object.
-	 *
-	 * @param notes, the notes to be written to the notes field.
-	 */
-	public void addNotes(String notes) {
-		this.notes = notes;
-	}
 }
