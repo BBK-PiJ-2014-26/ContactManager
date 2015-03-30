@@ -43,7 +43,7 @@ public class ContactManagerTest {
 				// This contact should have multiple future and past meetings.
 		batmanSuperman = myContactManager.getContacts(1, 2);
 		lanternSuperman = myContactManager.getContacts(2, 4);
-		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Betterhis World");
+		myContactManager.addNewPastMeeting(batmanSuperman, new GregorianCalendar(2014, 11, 26, 10, 5), "Acheiving Justice: Finding A Better World");
 				//Meeting id = 1
 		myContactManager.addFutureMeeting(batmanSuperman, new GregorianCalendar(2015, 11, 26, 10, 5));
 				//Meeting id = 2
@@ -738,6 +738,78 @@ public class ContactManagerTest {
 			} catch (IOException ex) {} //No action required for caught exception.
 		}
 		assertEquals(16, counter);
+	}
+
+	/**
+	 * Tests flush().
+	 *
+	 * Checks that a Contact record is written as expected.
+	 */
+	@Test
+	public void shouldWriteContactCorrectly() {
+		BufferedReader myReader = null;
+		String line = null;
+		try {
+			myContactManager.flush();
+			myReader = new BufferedReader(new FileReader(new File("./contacts.txt")));
+			line = myReader.readLine();
+			int counter = 0;
+			while (counter < 5) {
+				counter++;
+				line = myReader.readLine();
+			}
+		} catch (IOException ex) { //No action required for caught exception.
+		} finally {
+			try {
+				myReader.close();
+			} catch (IOException ex) {} //No action required for caught exception.
+		}
+		assertEquals("1, Bruce Wayne, The Dark Knight", line);
+	}
+
+	/**
+	 * Tests flush().
+	 *
+	 * Checks that a Contact iDcounter record is written as expected.
+	 */
+	@Test
+	public void shouldWriteContactIdCounterCorrectly() {
+		BufferedReader myReader = null;
+		String line = null;
+		try {
+			myContactManager.flush();
+			myReader = new BufferedReader(new FileReader(new File("./contacts.txt")));
+			line = myReader.readLine();
+		} catch (IOException ex) { //No action required for caught exception.
+		} finally {
+			try {
+				myReader.close();
+			} catch (IOException ex) {} //No action required for caught exception.
+		}
+		assertEquals("4", line);
+	}
+
+	/**
+	 * Tests flush().
+	 *
+	 * Checks that a Meeting iDcounter record is written as expected.
+	 */
+	@Test
+	public void shouldWriteMeetingIdCounterCorrectly() {
+		BufferedReader myReader = null;
+		String line = null;
+		try {
+			myContactManager.flush();
+			myReader = new BufferedReader(new FileReader(new File("./contacts.txt")));
+			line = myReader.readLine();
+			line = myReader.readLine();
+		} catch (IOException ex) { //No action required for caught exception.
+		} finally {
+			try {
+				myReader.close();
+			} catch (IOException ex) {} //No action required for caught exception.
+		}
+		assertEquals("7", line);
 	}
 
 	/**
