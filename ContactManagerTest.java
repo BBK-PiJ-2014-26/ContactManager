@@ -743,33 +743,6 @@ public class ContactManagerTest {
 	/**
 	 * Tests flush().
 	 *
-	 * Checks that a Contact record is written as expected.
-	 */
-	@Test
-	public void shouldWriteContactCorrectly() {
-		BufferedReader myReader = null;
-		String line = null;
-		try {
-			myContactManager.flush();
-			myReader = new BufferedReader(new FileReader(new File("./contacts.txt")));
-			line = myReader.readLine();
-			int counter = 0;
-			while (counter < 5) {
-				counter++;
-				line = myReader.readLine();
-			}
-		} catch (IOException ex) { //No action required for caught exception.
-		} finally {
-			try {
-				myReader.close();
-			} catch (IOException ex) {} //No action required for caught exception.
-		}
-		assertEquals("1, Bruce Wayne, The Dark Knight", line);
-	}
-
-	/**
-	 * Tests flush().
-	 *
 	 * Checks that a Contact iDcounter record is written as expected.
 	 */
 	@Test
