@@ -775,6 +775,38 @@ public class ContactManagerTest {
 	}
 
 	/**
+	 * Tests getFutureMeetingList(Calendar).
+	 *
+	 * Should return a list in chronological order.
+	 */
+	@Test
+	public void shouldReturnChronologicalFutureMeetingListUsingCalendar() {
+		//Adds to new FutureMeetings for the same day.
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2020, 7, 25, 10, 20));
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2020, 7, 25, 12, 20));
+		List<Meeting> testList = myContactManager.getFutureMeetingList(new GregorianCalendar(2020, 7, 25));
+		boolean inOrder = true;
+		Calendar left = null;
+		Meeting temp = null;
+		if (!testList.isEmpty()) {
+			temp = testList.get(0);
+			left = temp.getDate();
+		}
+		int size = testList.size();
+		for (int i = 1; i < size; i++) {
+			temp = testList.get(i);
+			Calendar right = temp.getDate();
+			if (left.after(right)) {
+				//Tests whether left meeting is scheduled after right meeting.
+				//If true, then the list is no in chronological order.
+				inOrder = false;
+			}
+			left = right;
+		}
+		assertTrue(inOrder);
+	}
+
+	/**
 	 * Tests getPastMeetingList(Contact).
 	 *
 	 * Should return a list in chronological order.
@@ -806,5 +838,62 @@ public class ContactManagerTest {
 			left = right;
 		}
 		assertTrue(inOrder);
+	}
+
+	/**
+	 * Tests getFutureMeeting(Contact).
+	 *
+	 * Should not return duplictes.
+	 */
+	@Test
+	public void shouldNotReturnDuplicateFutureMeetings() {
+		Set<Contact> tempSet = myContactManager.getContacts(2);
+		//Return a set of contacts containing a single contact superman.
+		Iterator<Contact> setIterator = tempSet.iterator();
+		//The set contains only one element so the first and only Contact is superman.
+		Contact superman = setIterator.next();
+		List<Meeting> testList = myContactManager.getFutureMeetingList(superman);
+		boolean noDupes = true;
+		//Checks there are no duplicates ids for Meeting id 2, 6 and 7.
+		if (countIds(2, testList) > 1 || countIds(6, testList) > 1 || countIds(7, testList) > 1) {
+			noDupes = false;
+		}
+		assertTrue(noDupes);
+	}
+
+	/**
+	 * Tests getPastMeeting(Contact).
+	 *
+	 * Should not return duplictes.
+	 */
+	@Test
+	public void shouldNotReturnDuplicatePastMeetings() {
+		Set<Contact> tempSet = myContactManager.getContacts(2);
+		//Return a set of contacts containing a single contact superman.
+		Iterator<Contact> setIterator = tempSet.iterator();
+		//The set contains only one element so the first and only Contact is superman.
+		Contact superman = setIterator.next();
+		List<PastMeeting> testList = myContactManager.getPastMeetingList(superman);
+		boolean noDupes = true;
+		//Checks there are no duplicates ids for Meeting id 3, 4 and 5.
+		if (countIds(3, testList) > 1 || countIds(4, testList) > 1 || countIds(5, testList) > 1) {
+			noDupes = false;
+		}
+		assertTrue(noDupes);
+	}
+
+	/**
+	 * Counts the number of ids in a list.
+	 */
+	public int countIds(int id, List<? extends Meeting> list) {
+		int result = 0;
+		for (int i = 0; i < list.size(); i++) {
+			Meeting temp = list.get(i);
+			result = 0;
+			if (temp.getId() == id) {
+				result++;
+			}
+		}
+		return result;
 	}
 }
