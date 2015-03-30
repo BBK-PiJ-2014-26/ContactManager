@@ -862,6 +862,27 @@ public class ContactManagerTest {
 	}
 
 	/**
+	 * Tests getFutureMeeting(Calendar).
+	 *
+	 * Should not return duplictes.
+	 */
+	@Test
+	public void shouldNotReturnDuplicateFutureMeetingsUsingCalendar() {
+		//Adds to new FutureMeetings for the same day.
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2020, 7, 25, 10, 20));
+		//Adds meeting id 8.
+		myContactManager.addFutureMeeting(lanternSuperman, new GregorianCalendar(2020, 7, 25, 12, 20));
+		//Adds meeting id 9.
+		List<Meeting> testList = myContactManager.getFutureMeetingList(new GregorianCalendar(2020, 7, 25));
+		boolean noDupes = true;
+		//Checks there are no duplicates ids for Meeting id 8 and 9.
+		if (countIds(8, testList) > 1 || countIds(9, testList) > 1) {
+			noDupes = false;
+		}
+		assertTrue(noDupes);
+	}
+
+	/**
 	 * Tests getPastMeeting(Contact).
 	 *
 	 * Should not return duplictes.
